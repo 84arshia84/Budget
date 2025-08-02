@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.ActionBudgetRequestEntity
 {
-    internal class ActionBudgetRequestEntity
+    public class ActionBudgetRequestEntity
     {
     }
 }

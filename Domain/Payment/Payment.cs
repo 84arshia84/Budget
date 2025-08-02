@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Payments
+namespace Domain.Payment
 {
-    internal class Payments
+    public class Payment
     {
     }
 }

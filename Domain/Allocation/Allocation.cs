@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.FundingSources
+namespace Domain.Allocation
 {
-    internal class FundingSources
+    public class Allocation
     {
     }
 }

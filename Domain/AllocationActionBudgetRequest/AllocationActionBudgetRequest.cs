@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.AllocationActionBudgetRequests
+namespace Domain.AllocationActionBudgetRequest
 {
-    internal class AllocationActionBudgetRequests
+    public class AllocationActionBudgetRequest
     {
     }
 }
