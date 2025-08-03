@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.ActionBudgetRequestEntity;
-using Domain.Allocation;
-using Domain.AllocationActionBudgetRequest;
+//using Domain.ActionBudgetRequestEntity;
+//using Domain.Allocation;
+//using Domain.AllocationActionBudgetRequest;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
-using Domain.Payment;
-using Domain.PaymentMethod;
+//using Domain.Payment;
+//using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
@@ -25,13 +25,13 @@ namespace Persistance
         {
         }
 
-        public DbSet<AllocationActionBudgetRequest> AllocationActionBudgetRequests { get; set; }
-        public DbSet<Allocation> Allocations { get; set; }
-        public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
+        //public DbSet<AllocationActionBudgetRequest> AllocationActionBudgetRequests { get; set; }
+        //public DbSet<Allocation> Allocations { get; set; }
+        //public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
         public DbSet<BudgetRequest> BudgetRequests { get; set; }
         public DbSet<FundingSource> FundingSources { get; set; }
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        //public DbSet<Payment> Payments { get; set; }
+        //public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<RequestingDepartment> RequestingDepartments { get; set; }
         public DbSet<RequestType> RequestTypes { get; set; }
 

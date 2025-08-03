@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Allocation
 {
-    public class Allocation
-    {
-    }
+    //public class Allocation
+    //{
+    //}
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Payment
 {
-    public class Payment
-    {
-    }
+    //public class Payment
+    //{
+    //}
 }

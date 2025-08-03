@@ -1,4 +1,11 @@
 
+using Application.Contracts;
+using Application.Services;
+using Domain.RequestingDepartment;
+using Microsoft.EntityFrameworkCore;
+using Persistance;
+using Persistance.Repositories;
+
 namespace Budget
 {
     public class Program
@@ -13,6 +20,19 @@ namespace Budget
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IRequestingDepartmentRepository, RequestingDepartmentRepository>();
+
+
+
+
+            builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();
+
+
+
 
             var app = builder.Build();
 

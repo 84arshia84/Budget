@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.RequestingDepartment
+namespace Application.Dto.RequestingDepartmen
 {
-    public class RequestingDepartment
+    public class GetByIdRequestingDepartmenDto
     {
         public long Id { get; set; }
         public string Description { get; set; }
-        public ICollection<BudgetRequest.BudgetRequest> BudgetRequests { get; set; }
     }
 }

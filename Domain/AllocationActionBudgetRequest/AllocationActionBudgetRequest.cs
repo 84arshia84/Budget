@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.AllocationActionBudgetRequest
 {
-    public class AllocationActionBudgetRequest
-    {
-    }
+    //public class AllocationActionBudgetRequest
+    //{
+    //}
 }
