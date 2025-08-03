@@ -8,7 +8,7 @@ namespace Domain.FundingSource
 {
     public class FundingSource
     {
-        public long id { get; set; }
+        public long Id { get; set; }
         public string Description { get; set; }
         public ICollection<BudgetRequest.BudgetRequest> BudgetRequests { get; set; }
     }

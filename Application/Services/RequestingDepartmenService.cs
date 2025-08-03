@@ -61,16 +61,14 @@ namespace Application.Services
         public async Task UpdateAsync(long id, UpdateRequestingDepartmenDto dto)
         {
             var department = await _repository.GetByIdAsync(id);
-            if (department==null)
-                throw new KeyNotFoundException($"UpdateRequestingDepartment {id} not found.");
-            var update = new RequestingDepartment()
-            {
-                Id = id,
-                Description = dto.Description
-            };
-            await _repository.UpdateAsync(update);
+            if (department == null)
+                throw new KeyNotFoundException($"دپارتمان با شناسه {id} یافت نشد.");
 
+            // ✅ فقط مقدار Description را تغییر می‌دهیم
+            department.Description = dto.Description;
 
+            // ✅ همان شیء قبلی را به ریپازیتوری می‌دهیم
+            await _repository.UpdateAsync(department);
         }
     }
 }
