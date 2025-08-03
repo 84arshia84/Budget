@@ -2,6 +2,7 @@
 using Application.Contracts;
 using Application.Services;
 using Domain.RequestingDepartment;
+using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
 using Persistance;
 using Persistance.Repositories;
@@ -25,12 +26,13 @@ namespace Budget
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IRequestingDepartmentRepository, RequestingDepartmentRepository>();
+            builder.Services.AddScoped<IRequestTypeRepository, RequestTypeRepository>();
 
 
 
 
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();
-
+            builder.Services.AddScoped<IRequestTypeService, RequestTypeService>();
 
 
 
