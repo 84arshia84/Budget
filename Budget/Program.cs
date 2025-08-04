@@ -1,6 +1,7 @@
 
 using Application.Contracts;
 using Application.Services;
+using Domain.FundingSource;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
@@ -27,12 +28,15 @@ namespace Budget
 
             builder.Services.AddScoped<IRequestingDepartmentRepository, RequestingDepartmentRepository>();
             builder.Services.AddScoped<IRequestTypeRepository, RequestTypeRepository>();
+            builder.Services.AddScoped<IFundingSourceRepository, FundingSourceRepository>();
 
 
 
 
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();
             builder.Services.AddScoped<IRequestTypeService, RequestTypeService>();
+            builder.Services.AddScoped<IFundingSourceService, FundingSourceService>();
+
 
 
 
