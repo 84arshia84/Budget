@@ -1,6 +1,7 @@
 
 using Application.Contracts;
 using Application.Services;
+using Domain.BudgetRequest;
 using Domain.FundingSource;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
@@ -29,6 +30,7 @@ namespace Budget
             builder.Services.AddScoped<IRequestingDepartmentRepository, RequestingDepartmentRepository>();
             builder.Services.AddScoped<IRequestTypeRepository, RequestTypeRepository>();
             builder.Services.AddScoped<IFundingSourceRepository, FundingSourceRepository>();
+            builder.Services.AddScoped<IBudgetRequestRepository,BudgetRequestRepository>();
 
 
 
@@ -36,6 +38,8 @@ namespace Budget
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();
             builder.Services.AddScoped<IRequestTypeService, RequestTypeService>();
             builder.Services.AddScoped<IFundingSourceService, FundingSourceService>();
+            builder.Services.AddScoped<IBudgetRequestService, BudgetRequestService>();
+            
 
 
 

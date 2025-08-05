@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ActionBudgetRequestEntity;
 //using Domain.ActionBudgetRequestEntity;
 //using Domain.Allocation;
 //using Domain.AllocationActionBudgetRequest;
@@ -27,7 +28,7 @@ namespace Persistance
 
         //public DbSet<AllocationActionBudgetRequest> AllocationActionBudgetRequests { get; set; }
         //public DbSet<Allocation> Allocations { get; set; }
-        //public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
+        public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
         public DbSet<BudgetRequest> BudgetRequests { get; set; }
         public DbSet<FundingSource> FundingSources { get; set; }
         //public DbSet<Payment> Payments { get; set; }

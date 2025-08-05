@@ -17,6 +17,7 @@ namespace Domain.BudgetRequest
         public string ServiceDescription { get; set; }
         public string budgetEstimationRanges { get; set; }
 
+        public ICollection<ActionBudgetRequestEntity.ActionBudgetRequestEntity>  ActionBudgetRequestEntity { get; set; }
         public RequestType.RequestType RequestType { get; set; }
         public RequestingDepartment.RequestingDepartment RequestingDepartment { get; set; }
         public FundingSource.FundingSource FundingSource { get; set; }
