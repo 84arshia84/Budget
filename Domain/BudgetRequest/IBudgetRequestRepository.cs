@@ -13,5 +13,6 @@ namespace Domain.BudgetRequest
         Task DeleteAsync (string id);
         Task<List<BudgetRequest>> GetAllAsync();
         Task<BudgetRequest> GetById(long id);
+        Task AddRangeAsync(IEnumerable<ActionBudgetRequestEntity.ActionBudgetRequestEntity> entities);
     }
 }

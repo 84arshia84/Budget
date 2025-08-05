@@ -10,6 +10,7 @@ namespace Application.Dto.ActionBudgetRequest
     {
         public string Description { get; set; }
 
-        public List<ICollection<BudgetAmountPeriodDto>> BudgetAmountPeriod { get; set; } = new();
+        public List<BudgetAmountPeriodDto> BudgetAmountPeriod { get; set; } = new();
+
     }
 }

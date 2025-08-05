@@ -16,6 +16,6 @@ namespace Application.Dto.BudgetRequest
         public int    year                       { get; set; }
         public string ServiceDescription               { get; set; }
         public string budgetEstimationRanges             { get; set; }
-        public List<ICollection<ActionBudgetRequestDto>> ActionBudgetRequests { get; set; }
+        public List<ActionBudgetRequestDto> ActionBudgetRequests { get; set; }
     }
 }

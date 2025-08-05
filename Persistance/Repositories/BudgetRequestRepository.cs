@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ActionBudgetRequestEntity;
 using Domain.BudgetRequest;
 
 namespace Persistance.Repositories
@@ -49,5 +50,13 @@ namespace Persistance.Repositories
             await _context.SaveChangesAsync();
 
         }
+
+        public async Task AddRangeAsync(IEnumerable<ActionBudgetRequestEntity> entities)
+        {
+            await _context.ActionBudgetRequestEntitys.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
+
+        
     }
 }
