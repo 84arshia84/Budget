@@ -13,26 +13,14 @@ namespace Application.Mapper
 {
     public class ActionBudgetRequestMapper
     {
-        public List<ActionBudgetRequestEntity> DtoToModelMapper(List<ActionBudgetRequestDto> dtos)
+        public List<ActionBudgetRequestEntity> ToEntity(List<ActionBudgetRequestDto> dtos)
         {
-            var entities = new List<ActionBudgetRequestEntity>();
-
-            foreach (var dto in dtos)
+            return dtos.Select(dto => new ActionBudgetRequestEntity
             {
-                // تبدیل لیست BudgetAmountPeriodDto به یک رشته JSON
-                string budgetAmountPeriodJson = JsonSerializer.Serialize(dto.BudgetAmountPeriod);
-
-                var entity = new ActionBudgetRequestEntity()
-                {
-                    Description = dto.Description,
-                    BudgetAmountPeriod = budgetAmountPeriodJson
-                    // BudgetRequestId رو بعداً در سرویس پر می‌کنیم
-                };
-
-                entities.Add(entity);
-            }
-
-            return entities;
+                Description = dto.Description,
+                BudgetAmountPeriod = JsonSerializer.Serialize(dto.BudgetAmountPeriod)
+            }).ToList();
         }
     }
+
 }

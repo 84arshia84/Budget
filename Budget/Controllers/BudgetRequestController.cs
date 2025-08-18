@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Dto.BudgetRequest;
+using Application.Dto.FundingSource;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,43 @@ namespace Budget.Controllers
             await _Service.AddAsyinc(dto);
             return Ok(dto);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetByIdBudgetRequestDto>> GetByIdAsync(long id)
+        {
+            var result = await _Service.GetByIdAsync(id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GetAllBudgetRequestDto>> GetAllAsync()
+        {
+            var result = await _Service.GetAllAsync();
+            return (Ok(result));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(long id)
+        {
+            await _Service.DeleteAsyinc(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, [FromBody] UpdateBudgetRequestDto dto)
+        {
+            var exating = await _Service.GetByIdAsync(id);
+            if (exating == null)
+                return NotFound();
+            await _Service.UpdateAsyinc(id, dto);
+            return NoContent();
+        }
+
+
+
+
 
 
     }

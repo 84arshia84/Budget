@@ -17,55 +17,69 @@ namespace Application.Services
     public class BudgetRequestService : IBudgetRequestService
     {
         private readonly IBudgetRequestRepository _repository;
+        private readonly BudgetRequestMapper _mapper;
+        private readonly BudgetRequestToDtoMapper _dtoMapper;
+        private readonly ActionBudgetRequestMapper _actionMapper;
 
-        public BudgetRequestService(IBudgetRequestRepository repository)
+        public BudgetRequestService(
+            IBudgetRequestRepository repository,
+            BudgetRequestMapper mapper,
+            BudgetRequestToDtoMapper dtoMapper,
+            ActionBudgetRequestMapper actionMapper)
         {
             _repository = repository;
+            _mapper = mapper;
+            _dtoMapper = dtoMapper;
+            _actionMapper = actionMapper;
         }
+
         public async Task AddAsyinc(AddBudgetRequestDto dto)
         {
-            // مرحله 1: درخواست اصلی رو مپ کن و ذخیره کن
-            BudgetRequestMapper budgetRequestMapper = new BudgetRequestMapper();
-            var budgetRequestEntity = budgetRequestMapper.DtoTomodelMapper(dto);
+            var budgetRequestEntity = _mapper.ToEntity(dto);
+            await _repository.AddAsync(budgetRequestEntity);
 
-            await _repository.AddAsync(budgetRequestEntity); // اینجا Id ساخته می‌شه
-
-            // اگر لیست اقدامات خالی یا null باشه، ادامه نده
             if (dto.ActionBudgetRequests == null || !dto.ActionBudgetRequests.Any())
                 return;
 
-            // مرحله 2: اقدامات رو مپ کن
-            ActionBudgetRequestMapper actionMapper = new ActionBudgetRequestMapper();
-            var actionEntities = actionMapper.DtoToModelMapper(dto.ActionBudgetRequests);
+            var actionEntities = _actionMapper.ToEntity(dto.ActionBudgetRequests);
 
-            // مرحله 3: به همه اقدامات، BudgetRequestId رو اختصاص بده
             foreach (var action in actionEntities)
-            {
                 action.BudgetRequestId = budgetRequestEntity.Id;
-            } 
 
-            // مرحله 4: اقدامات رو به دیتابیس اضافه کن
             await _repository.AddRangeAsync(actionEntities);
         }
 
-        public Task DeleteAsyinc(long id)
+        public async Task DeleteAsyinc(long id)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetById(id);
+            if (entity == null)
+                throw new KeyNotFoundException($"بودجه درخواستی با شناسه {id} یافت نشد.");
+
+            await _repository.DeleteAsync(id.ToString());
         }
 
-        public Task<List<ICollection<GetAllBudgetRequestDto>>> GetAllAsync()
+        public async Task<List<GetAllBudgetRequestDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var entities = await _repository.GetAllAsync();
+            return entities.Select(e => _dtoMapper.ToGetAllDto(e)).ToList();
         }
 
-        public Task<ICollection<GetByIdBudgetRequestDto>> GetByIdAsync(long id)
+        public async Task<GetByIdBudgetRequestDto> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetById(id);
+            if (entity == null) return null;
+
+            return _dtoMapper.ToGetByIdDto(entity);
         }
 
-        public Task UpdateAsyinc(UpdateBudgetRequestDto dto)
+        public async Task UpdateAsyinc(long id, UpdateBudgetRequestDto dto)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetById(id);
+            if (entity == null)
+                throw new KeyNotFoundException($"بودجه درخواستی با شناسه {id} یافت نشد.");
+
+            _mapper.UpdateEntity(dto, entity);
+            await _repository.UpdateAsync(entity);
         }
     }
 }

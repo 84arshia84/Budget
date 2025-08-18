@@ -1,5 +1,6 @@
 
 using Application.Contracts;
+using Application.Mapper;
 using Application.Services;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
@@ -39,7 +40,14 @@ namespace Budget
             builder.Services.AddScoped<IRequestTypeService, RequestTypeService>();
             builder.Services.AddScoped<IFundingSourceService, FundingSourceService>();
             builder.Services.AddScoped<IBudgetRequestService, BudgetRequestService>();
-            
+
+
+
+            builder.Services.AddScoped<BudgetRequestMapper>();
+            builder.Services.AddScoped<BudgetRequestToDtoMapper>();
+            builder.Services.AddScoped<ActionBudgetRequestMapper>();
+
+
 
 
 
