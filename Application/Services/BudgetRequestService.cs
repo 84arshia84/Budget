@@ -7,6 +7,7 @@ using Application.Contracts;
 using Application.Dto.ActionBudgetRequest;
 using Application.Dto.BudgetRequest;
 using Application.Mapper;
+using Domain.ActionBudgetRequestEntity;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
 using Domain.RequestingDepartment;
@@ -55,7 +56,7 @@ namespace Application.Services
             if (entity == null)
                 throw new KeyNotFoundException($"بودجه درخواستی با شناسه {id} یافت نشد.");
 
-            await _repository.DeleteAsync(id.ToString());
+            await _repository.DeleteAsync(id);
         }
 
         public async Task<List<GetAllBudgetRequestDto>> GetAllAsync()
@@ -78,8 +79,18 @@ namespace Application.Services
             if (entity == null)
                 throw new KeyNotFoundException($"بودجه درخواستی با شناسه {id} یافت نشد.");
 
-            _mapper.UpdateEntity(dto, entity);
-            await _repository.UpdateAsync(entity);
+
+            entity.RequestTitle = dto.RequestTitle;
+            entity.RequestingDepartmentId = dto.RequestingDepartmentId;
+            entity.RequestTypeId = dto.RequestTypeId;
+            entity.FundingSourceId = dto.FundingSourceId;
+            entity.year = dto.year;
+            entity.ServiceDescription = dto.ServiceDescription;
+            entity.budgetEstimationRanges = dto.budgetEstimationRanges;
+            entity.ActionBudgetRequestEntity = new List<ActionBudgetRequestEntity>();
+
+           await _repository.SaveChanges();
         }
+
     }
 }

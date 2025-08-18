@@ -17,14 +17,22 @@ namespace Persistance.Repositories
             _context = context;
         }
 
+
+
         public async Task AddAsync(BudgetRequest budgetRequest)
         {
             await _context.BudgetRequests.AddAsync(budgetRequest);
             await _context.SaveChangesAsync();
 
         }
+        public async Task AddRangeAsync(IEnumerable<ActionBudgetRequestEntity> entities)
+        {
+            await _context.ActionBudgetRequestEntitys.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
+       
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(long id)
         {
             var BudgetRequest = await _context.BudgetRequests.FindAsync(id);
             if (BudgetRequest != null)
@@ -44,19 +52,10 @@ namespace Persistance.Repositories
             return await _context.BudgetRequests.FindAsync(id);
         }
 
-        public async Task UpdateAsync(BudgetRequest budgetRequest)
+        public async Task SaveChanges()
         {
-            _context.BudgetRequests.Update(budgetRequest);
-            await _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
 
         }
-
-        public async Task AddRangeAsync(IEnumerable<ActionBudgetRequestEntity> entities)
-        {
-            await _context.ActionBudgetRequestEntitys.AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
-        }
-
-        
     }
 }

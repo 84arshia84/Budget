@@ -8,11 +8,13 @@ namespace Domain.BudgetRequest
 {
     public interface IBudgetRequestRepository
     {
+
         Task AddAsync (BudgetRequest  budgetRequest);
-        Task UpdateAsync (BudgetRequest budgetRequest);
-        Task DeleteAsync (string id);
+        Task DeleteAsync (long id);
         Task<List<BudgetRequest>> GetAllAsync();
         Task<BudgetRequest> GetById(long id);
         Task AddRangeAsync(IEnumerable<ActionBudgetRequestEntity.ActionBudgetRequestEntity> entities);
+        Task SaveChanges();
+
     }
 }

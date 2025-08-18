@@ -13,7 +13,8 @@
             Task UpdateAsyinc(long id, UpdateBudgetRequestDto dto);
             Task DeleteAsyinc( long id );
             Task<GetByIdBudgetRequestDto> GetByIdAsync(long id);
-            Task<List<GetAllBudgetRequestDto>> GetAllAsync();   
+            Task<List<GetAllBudgetRequestDto>> GetAllAsync();
+            
 
     }
     }

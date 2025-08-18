@@ -25,7 +25,7 @@ namespace Application.Mapper
             };
             return entity;
         }
-        public void UpdateEntity(UpdateBudgetRequestDto dto, BudgetRequest entity)
+        public void UpdateEntity( BudgetRequest entity,UpdateBudgetRequestDto dto)
         {
             entity.RequestTitle = dto.RequestTitle;
             entity.RequestingDepartmentId = dto.RequestingDepartmentId;
@@ -34,6 +34,7 @@ namespace Application.Mapper
             entity.year = dto.year;
             entity.ServiceDescription = dto.ServiceDescription;
             entity.budgetEstimationRanges = dto.budgetEstimationRanges;
+            
         }
     }
 }
