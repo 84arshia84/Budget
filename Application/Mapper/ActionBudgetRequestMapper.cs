@@ -15,12 +15,23 @@ namespace Application.Mapper
     {
         public List<ActionBudgetRequestEntity> ToEntity(List<ActionBudgetRequestDto> dtos)
         {
-            return dtos.Select(dto => new ActionBudgetRequestEntity
+            var entities = new List<ActionBudgetRequestEntity>();
+
+            foreach (var dto in dtos)
             {
-                Description = dto.Description,
-                BudgetAmountPeriod = JsonSerializer.Serialize(dto.BudgetAmountPeriod)
-            }).ToList();
+                string budgetAmountPeriodJson = JsonSerializer.Serialize(dto.BudgetAmountPeriod);
+
+                var entity = new ActionBudgetRequestEntity()
+                {
+                    Description = dto.Description,
+                    BudgetAmountPeriod = budgetAmountPeriodJson
+                };
+
+                entities.Add(entity);
+            }
+
+            return entities;
         }
     }
-
 }
+

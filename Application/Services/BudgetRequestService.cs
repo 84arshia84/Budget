@@ -77,9 +77,9 @@ namespace Application.Services
         {
             var entity = await _repository.GetById(id);
             if (entity == null)
-                throw new KeyNotFoundException($"بودجه درخواستی با شناسه {id} یافت نشد.");
+                throw new KeyNotFoundException($"درخواست بودجه با شناسه {id} یافت نشد.");
 
-
+            // آپدیت فیلدهای اصلی
             entity.RequestTitle = dto.RequestTitle;
             entity.RequestingDepartmentId = dto.RequestingDepartmentId;
             entity.RequestTypeId = dto.RequestTypeId;
@@ -87,10 +87,21 @@ namespace Application.Services
             entity.year = dto.year;
             entity.ServiceDescription = dto.ServiceDescription;
             entity.budgetEstimationRanges = dto.budgetEstimationRanges;
-            entity.ActionBudgetRequestEntity = new List<ActionBudgetRequestEntity>();
 
-           await _repository.SaveChanges();
+            // مدیریت ActionBudgetRequests
+            await _repository.RemoveActionsByRequestId(id);
+
+            if (dto.ActionBudgetRequests != null && dto.ActionBudgetRequests.Any())
+            {
+                var newActions = _actionMapper.ToEntity(dto.ActionBudgetRequests);
+                foreach (var action in newActions)
+                {
+                    action.BudgetRequestId = id;
+                }
+                await _repository.AddRangeAsync(newActions);
+            }
+
+            await _repository.UpdateAsync(entity);
         }
-
     }
 }
