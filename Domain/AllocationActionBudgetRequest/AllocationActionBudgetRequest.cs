@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Domain.AllocationActionBudgetRequest
 {
-    //public class AllocationActionBudgetRequest
-    //{
-    //}
+    public class AllocationActionBudgetRequest
+    {
+        public long Id { get; set; }
+        public long AllocationId { get; set; }
+        public Allocation.Allocation Allocation { get; set; }
+        public long ActionBudgetRequestEntityId { get; set; } 
+        public ActionBudgetRequestEntity.ActionBudgetRequestEntity ActionBudgetRequestEntity { get; set; }
+        public Decimal AllocatedAmount { get; set; } 
+
+    }
 }

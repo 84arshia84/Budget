@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.ActionBudgetRequestEntity;
+using Domain.Allocation;
+using Domain.AllocationActionBudgetRequest;
 //using Domain.ActionBudgetRequestEntity;
 //using Domain.Allocation;
 //using Domain.AllocationActionBudgetRequest;
@@ -26,8 +28,8 @@ namespace Persistance
         {
         }
 
-        //public DbSet<AllocationActionBudgetRequest> AllocationActionBudgetRequests { get; set; }
-        //public DbSet<Allocation> Allocations { get; set; }
+        public DbSet<AllocationActionBudgetRequest> AllocationActionBudgetRequests { get; set; }
+        public DbSet<Allocation> Allocations { get; set; }
         public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
         public DbSet<BudgetRequest> BudgetRequests { get; set; }
         public DbSet<FundingSource> FundingSources { get; set; }
@@ -57,6 +59,28 @@ namespace Persistance
                 .WithMany(f=>f.BudgetRequests)
                 .HasForeignKey(r=>r.FundingSourceId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<AllocationActionBudgetRequest>()
+                .HasKey(x => new { x.AllocationId, x.ActionBudgetRequestEntityId });
+
+            modelBuilder.Entity<AllocationActionBudgetRequest>()
+                .HasOne(x => x.Allocation)
+                .WithMany(x => x.AllocationActionBudgetRequests)
+                .HasForeignKey(x => x.AllocationId)
+                // حذف Cascade برای جلوگیری از Multiple cascade paths که باعث خطا می‌شود
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AllocationActionBudgetRequest>()
+                .HasOne(x => x.ActionBudgetRequestEntity)
+                .WithMany()
+                .HasForeignKey(x => x.ActionBudgetRequestEntityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AllocationActionBudgetRequest>()
+                .Property(p => p.AllocatedAmount)
+                .HasPrecision(18, 2);
+
         }
     }
 }
