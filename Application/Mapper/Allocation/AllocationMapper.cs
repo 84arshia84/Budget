@@ -34,14 +34,18 @@ namespace Application.Mapper.Allocation
             allocation.Date = dto.Date;
             allocation.BudgetRequestId = dto.BudgetRequestId;
 
+            // ✅ Clear existing relationships
             allocation.AllocationActionBudgetRequests.Clear();
-            allocation.AllocationActionBudgetRequests = dto.ActionAllocations
-                .Select(x => new AllocationActionBudgetRequest
+
+            // ✅ Add new ones — DO NOT set AllocationId manually
+            foreach (var x in dto.ActionAllocations)
+            {
+                allocation.AllocationActionBudgetRequests.Add(new AllocationActionBudgetRequest
                 {
-                    AllocationId = allocation.Id,
                     ActionBudgetRequestEntityId = x.ActionBudgetRequestId,
                     AllocatedAmount = x.BudgetAmountPeriod
-                }).ToList();
+                });
+            }
         }
 
         public static GetAllocationDto ToDto(Domain.Allocation.Allocation allocation)
