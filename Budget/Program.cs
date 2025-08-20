@@ -1,7 +1,9 @@
 
 using Application.Contracts;
 using Application.Mapper;
+using Application.Mapper.Allocation;
 using Application.Services;
+using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
 using Domain.RequestingDepartment;
@@ -32,6 +34,7 @@ namespace Budget
             builder.Services.AddScoped<IRequestTypeRepository, RequestTypeRepository>();
             builder.Services.AddScoped<IFundingSourceRepository, FundingSourceRepository>();
             builder.Services.AddScoped<IBudgetRequestRepository,BudgetRequestRepository>();
+            builder.Services.AddScoped<IAllocationRepository,AllocationRepository>();
 
 
 
@@ -40,12 +43,15 @@ namespace Budget
             builder.Services.AddScoped<IRequestTypeService, RequestTypeService>();
             builder.Services.AddScoped<IFundingSourceService, FundingSourceService>();
             builder.Services.AddScoped<IBudgetRequestService, BudgetRequestService>();
+            builder.Services.AddScoped<IAllocationService, AllocationService>();
 
 
 
             builder.Services.AddScoped<BudgetRequestMapper>();
             builder.Services.AddScoped<BudgetRequestToDtoMapper>();
             builder.Services.AddScoped<ActionBudgetRequestMapper>();
+            builder.Services.AddScoped<AllocationMapper>();
+
 
 
 

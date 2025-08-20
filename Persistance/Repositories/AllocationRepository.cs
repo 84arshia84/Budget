@@ -33,14 +33,17 @@ namespace Persistance.Repositories
             }
         }
 
-        public async Task<List<Allocation>>GetAllAsync()
+        public async Task<List<Allocation>> GetAllAsync()
         {
-            return await _context.Allocations.ToListAsync();
+            return await _context.Allocations
+                .Include(a => a.AllocationActionBudgetRequests)
+                .ToListAsync();
         }
-
         public async Task<Allocation> GetByIdAsync(long Id)
         {
-            return await _context.Allocations.FindAsync(Id);
+            return await _context.Allocations
+                .Include(a => a.AllocationActionBudgetRequests)
+                .FirstOrDefaultAsync(a => a.Id == Id);
         }
 
         public async Task UpdateAsync(Allocation allocation)

@@ -15,5 +15,6 @@ namespace Application.Contracts
         Task DeleteAsync(long id);
         Task<GetAllocationDto> GetById(long id);
         Task<List<GetAllocationDto>> GetAllAsync();
+
     }
 }
