@@ -22,5 +22,6 @@ namespace Domain.BudgetRequest
         public RequestingDepartment.RequestingDepartment RequestingDepartment { get; set; }
         public FundingSource.FundingSource FundingSource { get; set; }
 
+        public ICollection<Allocation.Allocation> Allocations { get; set; } = new List<Allocation.Allocation>();
     }
 }

@@ -6,23 +6,16 @@ using System.Threading.Tasks;
 using Domain.ActionBudgetRequestEntity;
 using Domain.Allocation;
 using Domain.AllocationActionBudgetRequest;
-//using Domain.ActionBudgetRequestEntity;
-//using Domain.Allocation;
-//using Domain.AllocationActionBudgetRequest;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
-//using Domain.Payment;
-//using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace Persistance
 {
     public class AppDbContext : DbContext
     {
-        // کانستراکتور با دریافت گزینه‌های کانفیگ از DI
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -33,49 +26,56 @@ namespace Persistance
         public DbSet<ActionBudgetRequestEntity> ActionBudgetRequestEntitys { get; set; }
         public DbSet<BudgetRequest> BudgetRequests { get; set; }
         public DbSet<FundingSource> FundingSources { get; set; }
-        //public DbSet<Payment> Payments { get; set; }
-        //public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<RequestingDepartment> RequestingDepartments { get; set; }
         public DbSet<RequestType> RequestTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // فقط یک بار، در اول
+            base.OnModelCreating(modelBuilder);
 
-            // رابطه BudgetRequest با RequestType
+            // BudgetRequest → RequestType
             modelBuilder.Entity<BudgetRequest>()
                 .HasOne(r => r.RequestType)
                 .WithMany(rt => rt.BudgetRequests)
                 .HasForeignKey(r => r.RequestTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // BudgetRequest → RequestingDepartment
             modelBuilder.Entity<BudgetRequest>()
                 .HasOne(r => r.RequestingDepartment)
                 .WithMany(rd => rd.BudgetRequests)
                 .HasForeignKey(r => r.RequestingDepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // BudgetRequest → FundingSource
             modelBuilder.Entity<BudgetRequest>()
                 .HasOne(r => r.FundingSource)
                 .WithMany(f => f.BudgetRequests)
                 .HasForeignKey(r => r.FundingSourceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔑 تصحیح کلید مرکب: فقط با فیلدهای اسکالر (مثلاً Id)
+            // BudgetRequest → Allocation
+            modelBuilder.Entity<Allocation>()
+                .HasOne(a => a.BudgetRequest)
+                .WithMany(b => b.Allocations)
+                .HasForeignKey(a => a.BudgetRequestId)
+                .OnDelete(DeleteBehavior.Restrict); // ✅ جلوگیری از حذف BudgetRequest در صورت وجود Allocation
+
+            // 🔑 کلید مرکب AllocationActionBudgetRequest
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasKey(x => new { x.AllocationId, x.ActionBudgetRequestEntityId });
 
-            // رابطه با Allocation
+            // Allocation → AllocationActionBudgetRequests
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.Allocation)
                 .WithMany(x => x.AllocationActionBudgetRequests)
                 .HasForeignKey(x => x.AllocationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade); // ✅ پاک شدن وابسته‌ها همراه با Allocation
 
-            // رابطه با ActionBudgetRequestEntity
+            // ActionBudgetRequestEntity → AllocationActionBudgetRequests
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.ActionBudgetRequestEntity)
-                .WithMany() // یا باش: .WithMany(ar => ar.AllocationActionBudgetRequests) اگر navigation داشته باشه
+                .WithMany() // اگه Navigation داری می‌تونی اینجا وصلش کنی
                 .HasForeignKey(x => x.ActionBudgetRequestEntityId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -83,8 +83,6 @@ namespace Persistance
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .Property(p => p.AllocatedAmount)
                 .HasPrecision(18, 2);
-
-            // ❌ ننویس: base.OnModelCreating(modelBuilder); دوباره در آخر
         }
     }
 }

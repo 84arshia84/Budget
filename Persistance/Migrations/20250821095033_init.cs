@@ -135,7 +135,6 @@ namespace Persistance.Migrations
                 {
                     AllocationId = table.Column<long>(type: "bigint", nullable: false),
                     ActionBudgetRequestEntityId = table.Column<long>(type: "bigint", nullable: false),
-                    Id = table.Column<long>(type: "bigint", nullable: false),
                     AllocatedAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
@@ -151,8 +150,7 @@ namespace Persistance.Migrations
                         name: "FK_AllocationActionBudgetRequests_Allocations_AllocationId",
                         column: x => x.AllocationId,
                         principalTable: "Allocations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

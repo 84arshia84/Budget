@@ -219,7 +219,7 @@ namespace Persistance.Migrations
                     b.HasOne("Domain.Allocation.Allocation", "Allocation")
                         .WithMany("AllocationActionBudgetRequests")
                         .HasForeignKey("AllocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ActionBudgetRequestEntity");
