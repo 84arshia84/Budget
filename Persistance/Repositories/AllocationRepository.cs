@@ -49,30 +49,7 @@ namespace Persistance.Repositories
 
         public async Task UpdateAsync(Allocation allocation)
         {
-            var existing = await _context.Allocations
-                .Include(a => a.AllocationActionBudgetRequests)
-                .FirstOrDefaultAsync(a => a.Id == allocation.Id);
-
-            if (existing == null)
-                throw new KeyNotFoundException("Allocation not found");
-
-            existing.Title = allocation.Title;
-            existing.Date = allocation.Date;
-            existing.BudgetRequestId = allocation.BudgetRequestId;
-
-            // حذف قدیمی‌ها
-            _context.AllocationActionBudgetRequests.RemoveRange(existing.AllocationActionBudgetRequests);
-
-            // اضافه کردن جدیدها
-            foreach (var actionAlloc in allocation.AllocationActionBudgetRequests)
-            {
-                existing.AllocationActionBudgetRequests.Add(new AllocationActionBudgetRequest
-                {
-                    ActionBudgetRequestEntityId = actionAlloc.ActionBudgetRequestEntityId,
-                    AllocatedAmount = actionAlloc.AllocatedAmount
-                });
-            }
-
+            _context.Allocations.Update(allocation);
             await _context.SaveChangesAsync();
         }
     }

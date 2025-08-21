@@ -28,26 +28,7 @@ namespace Application.Mapper.Allocation
             };
         }
 
-        public static void UpdateEntity(Domain.Allocation.Allocation allocation, UpdateAllocationDto dto)
-        {
-            allocation.Title = dto.Title;
-            allocation.Date = dto.Date;
-            allocation.BudgetRequestId = dto.BudgetRequestId;
-
-            // ✅ Clear existing relationships
-            allocation.AllocationActionBudgetRequests.Clear();
-
-            // ✅ Add new ones — DO NOT set AllocationId manually
-            foreach (var x in dto.ActionAllocations)
-            {
-                allocation.AllocationActionBudgetRequests.Add(new AllocationActionBudgetRequest
-                {
-                    ActionBudgetRequestEntityId = x.ActionBudgetRequestId,
-                    AllocatedAmount = x.BudgetAmountPeriod
-                });
-            }
-        }
-
+       
         public static GetAllocationDto ToDto(Domain.Allocation.Allocation allocation)
         {
             return new GetAllocationDto

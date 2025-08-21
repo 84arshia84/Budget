@@ -8,6 +8,7 @@ using Application.Contracts;
 using Application.Dto.Allocation;
 using Application.Mapper.Allocation;
 using Domain.Allocation;
+using Domain.AllocationActionBudgetRequest;
 
 namespace Application.Services
 {
@@ -43,22 +44,30 @@ namespace Application.Services
             return allocation == null ? null : AllocationMapper.ToDto(allocation);
         }
 
-
         public async Task UpdateAsync(long id, UpdateAllocationDto dto)
         {
-            try
-            {
-            var allocation = await _repository.GetByIdAsync(id);
-            if (allocation == null) throw new Exception("Allocation not found!");
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
 
-            AllocationMapper.UpdateEntity(allocation, dto);
-            await _repository.UpdateAsync(allocation);
-            }
-            catch (Exception e)
+                throw new KeyNotFoundException($"Allocation {id} not found.");
+            existing.Title = dto.Title;
+            existing.Date = dto.Date;
+            existing.BudgetRequestId = dto.BudgetRequestId;
+
+            existing.AllocationActionBudgetRequests.Clear();
+            foreach (var item in dto.ActionAllocations)
             {
-                Console.WriteLine(e);
-                throw;
+
+
+                existing.AllocationActionBudgetRequests.Add(new AllocationActionBudgetRequest()
+                {
+                    ActionBudgetRequestEntityId = item.ActionBudgetRequestId,
+                    AllocatedAmount = item.BudgetAmountPeriod
+
+                });
             }
+
+            await _repository.UpdateAsync(existing);
 
         }
     }

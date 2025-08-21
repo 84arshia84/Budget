@@ -40,47 +40,51 @@ namespace Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); // فقط یک بار، در اول
 
+            // رابطه BudgetRequest با RequestType
             modelBuilder.Entity<BudgetRequest>()
                 .HasOne(r => r.RequestType)
                 .WithMany(rt => rt.BudgetRequests)
                 .HasForeignKey(r => r.RequestTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             modelBuilder.Entity<BudgetRequest>()
-                .HasOne(r=>r.RequestingDepartment)
-                .WithMany(rd=>rd.BudgetRequests)
-                .HasForeignKey(r=>r.RequestingDepartmentId)
+                .HasOne(r => r.RequestingDepartment)
+                .WithMany(rd => rd.BudgetRequests)
+                .HasForeignKey(r => r.RequestingDepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<BudgetRequest>()
-                .HasOne(r=>r.FundingSource)
-                .WithMany(f=>f.BudgetRequests)
-                .HasForeignKey(r=>r.FundingSourceId)
+                .HasOne(r => r.FundingSource)
+                .WithMany(f => f.BudgetRequests)
+                .HasForeignKey(r => r.FundingSourceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            // 🔑 تصحیح کلید مرکب: فقط با فیلدهای اسکالر (مثلاً Id)
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasKey(x => new { x.AllocationId, x.ActionBudgetRequestEntityId });
 
+            // رابطه با Allocation
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.Allocation)
                 .WithMany(x => x.AllocationActionBudgetRequests)
                 .HasForeignKey(x => x.AllocationId)
-                // حذف Cascade برای جلوگیری از Multiple cascade paths که باعث خطا می‌شود
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // رابطه با ActionBudgetRequestEntity
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.ActionBudgetRequestEntity)
-                .WithMany()
+                .WithMany() // یا باش: .WithMany(ar => ar.AllocationActionBudgetRequests) اگر navigation داشته باشه
                 .HasForeignKey(x => x.ActionBudgetRequestEntityId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // تنظیم دقت عددی
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .Property(p => p.AllocatedAmount)
                 .HasPrecision(18, 2);
 
+            // ❌ ننویس: base.OnModelCreating(modelBuilder); دوباره در آخر
         }
     }
 }

@@ -38,28 +38,30 @@ namespace Budget.Controllers
             return CreatedAtAction(nameof(GetById), new { id = dto.BudgetRequestId }, dto);
         }
 
-        [HttpPut("{id:long}")]
-        public async Task<ActionResult> Update(long id, [FromBody] UpdateAllocationDto dto)
-        {
-            if (dto.ActionAllocations == null || !dto.ActionAllocations.Any())
-                return BadRequest("At least one action allocation is required.");
-
-            try
-            {
-                await _allocationService.UpdateAsync(id, dto);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-        }
 
         [HttpDelete("{id:long}")]
         public async Task<ActionResult> Delete(long id)
         {
             await _allocationService.DeleteAsync(id);
             return NoContent();
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, [FromBody] UpdateAllocationDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _allocationService.UpdateAsync(id, dto);
+                return Ok(new { message = "Allocation updated successfully." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { error = "Allocation not found." });
+            }
         }
     }
 }

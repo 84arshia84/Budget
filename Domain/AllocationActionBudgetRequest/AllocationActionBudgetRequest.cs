@@ -8,7 +8,6 @@ namespace Domain.AllocationActionBudgetRequest
 {
     public class AllocationActionBudgetRequest
     {
-        public long Id { get; set; }
         public long AllocationId { get; set; }
         public Allocation.Allocation Allocation { get; set; }
         public long ActionBudgetRequestEntityId { get; set; } 
