@@ -52,5 +52,19 @@ namespace Persistance.Repositories
             _context.Allocations.Update(allocation);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task RemoveActionsByAllocationId(long allocationId)
+        {
+            var actions = await _context.AllocationActionBudgetRequests
+                .Where(x => x.AllocationId == allocationId)
+                .ToListAsync();
+
+            if (actions.Any())
+            {
+                _context.AllocationActionBudgetRequests.RemoveRange(actions);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

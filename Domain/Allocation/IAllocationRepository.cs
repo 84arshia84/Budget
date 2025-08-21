@@ -13,5 +13,8 @@ namespace Domain.Allocation
         Task DeleteAsync (long Id);
         Task<List<Allocation>> GetAllAsync();
         Task <Allocation> GetByIdAsync(long Id);
+
+        Task RemoveActionsByAllocationId(long allocationId);
+
     }
 }

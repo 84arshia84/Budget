@@ -48,27 +48,26 @@ namespace Application.Services
         {
             var existing = await _repository.GetByIdAsync(id);
             if (existing == null)
-
                 throw new KeyNotFoundException($"Allocation {id} not found.");
+
+            // آپدیت فیلدهای اصلی
             existing.Title = dto.Title;
             existing.Date = dto.Date;
             existing.BudgetRequestId = dto.BudgetRequestId;
 
-            existing.AllocationActionBudgetRequests.Clear();
-            foreach (var item in dto.ActionAllocations)
-            {
+            // 👇 پاک کردن Action های قبلی از دیتابیس
+            await _repository.RemoveActionsByAllocationId(existing.Id);
 
-
-                existing.AllocationActionBudgetRequests.Add(new AllocationActionBudgetRequest()
+            // 👇 اضافه کردن Action های جدید
+            existing.AllocationActionBudgetRequests = dto.ActionAllocations
+                .Select(item => new AllocationActionBudgetRequest
                 {
+                    AllocationId = existing.Id, // 👈 مهم
                     ActionBudgetRequestEntityId = item.ActionBudgetRequestId,
                     AllocatedAmount = item.BudgetAmountPeriod
-
-                });
-            }
+                }).ToList();
 
             await _repository.UpdateAsync(existing);
-
         }
     }
 }
