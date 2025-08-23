@@ -8,6 +8,7 @@ using Domain.Allocation;
 using Domain.AllocationActionBudgetRequest;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
+using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Persistance
         public DbSet<FundingSource> FundingSources { get; set; }
         public DbSet<RequestingDepartment> RequestingDepartments { get; set; }
         public DbSet<RequestType> RequestTypes { get; set; }
+        public DbSet<PaymentMethod> PaymentMethod { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

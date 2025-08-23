@@ -6,6 +6,7 @@ using Application.Services;
 using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
+using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace Budget
             builder.Services.AddScoped<IFundingSourceRepository, FundingSourceRepository>();
             builder.Services.AddScoped<IBudgetRequestRepository,BudgetRequestRepository>();
             builder.Services.AddScoped<IAllocationRepository,AllocationRepository>();
+            builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
 
 
@@ -44,6 +46,7 @@ namespace Budget
             builder.Services.AddScoped<IFundingSourceService, FundingSourceService>();
             builder.Services.AddScoped<IBudgetRequestService, BudgetRequestService>();
             builder.Services.AddScoped<IAllocationService, AllocationService>();
+            builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 
 
 

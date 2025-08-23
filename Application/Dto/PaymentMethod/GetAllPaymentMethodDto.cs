@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.PaymentMethod
+namespace Application.Dto.PaymentMethod
 {
-    public class PaymentMethod
+    public class GetAllPaymentMethodDto
     {
         public long Id { get; set; }
         public string title { get; set; }
     }
-
 }
+
