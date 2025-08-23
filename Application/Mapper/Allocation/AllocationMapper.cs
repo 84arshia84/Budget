@@ -33,6 +33,7 @@ namespace Application.Mapper.Allocation
         {
             return new GetAllocationDto
             {
+                Id = allocation.Id,
                 Title = allocation.Title,
                 Date = allocation.Date,
                 BudgetRequestId = allocation.BudgetRequestId,

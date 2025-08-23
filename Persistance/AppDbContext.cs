@@ -61,23 +61,30 @@ namespace Persistance
                 .HasForeignKey(a => a.BudgetRequestId)
                 .OnDelete(DeleteBehavior.Restrict); // ✅ جلوگیری از حذف BudgetRequest در صورت وجود Allocation
 
-            // 🔑 کلید مرکب AllocationActionBudgetRequest
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasKey(x => new { x.AllocationId, x.ActionBudgetRequestEntityId });
 
-            // Allocation → AllocationActionBudgetRequests
+
+
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.Allocation)
                 .WithMany(x => x.AllocationActionBudgetRequests)
                 .HasForeignKey(x => x.AllocationId)
                 .OnDelete(DeleteBehavior.Cascade); // ✅ پاک شدن وابسته‌ها همراه با Allocation
 
-            // ActionBudgetRequestEntity → AllocationActionBudgetRequests
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .HasOne(x => x.ActionBudgetRequestEntity)
                 .WithMany() // اگه Navigation داری می‌تونی اینجا وصلش کنی
                 .HasForeignKey(x => x.ActionBudgetRequestEntityId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            // 🔑 کلید مرکب AllocationActionBudgetRequest
+            modelBuilder.Entity<AllocationActionBudgetRequest>()
+                .HasKey(x => new { x.AllocationId, x.ActionBudgetRequestEntityId });
+
+
+            // ActionBudgetRequestEntity → AllocationActionBudgetRequests
 
             // تنظیم دقت عددی
             modelBuilder.Entity<AllocationActionBudgetRequest>()
