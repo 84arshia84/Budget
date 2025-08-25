@@ -22,13 +22,14 @@ namespace Persistance.Repositories
             await _context.SaveChangesAsync();
         }
 
+       
         public async Task DeleteAsync(long Id)
         {
             var type = await _context.PaymentMethod.FindAsync(Id);
             if (type != null)
             {
                 _context.PaymentMethod.Remove(type);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
 
