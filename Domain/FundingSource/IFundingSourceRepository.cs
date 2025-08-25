@@ -10,7 +10,7 @@ namespace Domain.FundingSource
     {
         Task AddAsync (FundingSource fundingSource);
         Task UpdateAsync (FundingSource fundingSource);
-        Task DeleteAsync (long id);
+        Task DeleteAsync (long Id);
         Task <List<FundingSource>>GetAllAsync ();
         Task <FundingSource> GetById(long  id);
     }

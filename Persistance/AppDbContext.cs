@@ -8,6 +8,7 @@ using Domain.Allocation;
 using Domain.AllocationActionBudgetRequest;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
+using Domain.Payment;
 using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
@@ -30,6 +31,7 @@ namespace Persistance
         public DbSet<RequestingDepartment> RequestingDepartments { get; set; }
         public DbSet<RequestType> RequestTypes { get; set; }
         public DbSet<PaymentMethod> PaymentMethod { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,6 +94,20 @@ namespace Persistance
             modelBuilder.Entity<AllocationActionBudgetRequest>()
                 .Property(p => p.AllocatedAmount)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.PaymentMethod)
+                .WithMany()
+                .HasForeignKey(p => p.PaymentMethodId)
+                .OnDelete(DeleteBehavior.Restrict); // جلوگیری از حذف PaymentMethod در صورت وجود Payment
+
+            // تعریف رابطه بین Payment و Allocation
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Allocation)
+                .WithMany()
+                .HasForeignKey(p => p.AllocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

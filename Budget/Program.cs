@@ -6,6 +6,7 @@ using Application.Services;
 using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
+using Domain.Payment;
 using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
@@ -37,6 +38,7 @@ namespace Budget
             builder.Services.AddScoped<IBudgetRequestRepository,BudgetRequestRepository>();
             builder.Services.AddScoped<IAllocationRepository,AllocationRepository>();
             builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 
@@ -47,6 +49,7 @@ namespace Budget
             builder.Services.AddScoped<IBudgetRequestService, BudgetRequestService>();
             builder.Services.AddScoped<IAllocationService, AllocationService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 
 
