@@ -38,7 +38,9 @@ namespace Application.Services
 
         public async Task AddAsyinc(AddBudgetRequestDto dto)
         {
-            var validator = new AddBudgetRequestDtoValidator();
+          
+
+            var validator = new ActionBudgetRequestDtoValidator();
             validator.Validate(dto);
 
             var budgetRequestEntity = _mapper.ToEntity(dto);

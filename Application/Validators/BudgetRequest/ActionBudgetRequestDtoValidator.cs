@@ -20,6 +20,8 @@ namespace Application.Validators.BudgetRequest
             if (dto.BudgetAmountPeriod == null || dto.BudgetAmountPeriod.Count == 0)
                 throw new ArgumentException("حداقل یک بازه بودجه باید وارد شود.");
 
+
+
             var periodValidator = new BudgetAmountPeriodDtoValidator();
             foreach (var period in dto.BudgetAmountPeriod)
             {
