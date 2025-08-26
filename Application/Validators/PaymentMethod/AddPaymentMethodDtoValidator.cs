@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Dto.PaymentMethod;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,15 @@ using System.Threading.Tasks;
 
 namespace Application.Validators.PaymentMethod
 {
-    internal class AddPaymentMethodDtoValidator
+    public class AddPaymentMethodDtoValidator
     {
+        public void Validate(AddPaymentMethodDto dto)
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            if (string.IsNullOrWhiteSpace(dto.title))
+                throw new ArgumentException("نام روش پرداخت الزامی است.");
+        }
     }
 }
