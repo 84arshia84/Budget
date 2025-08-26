@@ -9,7 +9,7 @@ namespace Application.Validators.FundingSource
 {
     public class UpdateFundingSourceDtoValidator
     {
-        public void Validate(AddFundingSourceDto dto)
+        public void Validate(UpdateFundingSourceDto dto)
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));

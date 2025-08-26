@@ -17,5 +17,6 @@ namespace Application.Validators.RequestingDepartment
             if (string.IsNullOrWhiteSpace(dto.Description))
                 throw new ArgumentException("نام دپارتمان الزامی است.");
         }
+
     }
 }

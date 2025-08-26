@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Contracts;
 using Application.Dto.FundingSource;
+using Application.Validators.Allocation;
+using Application.Validators.FundingSource;
 using Domain.FundingSource;
 using Domain.RequestingDepartment;
 
@@ -21,6 +23,9 @@ namespace Application.Services
 
         public async Task AddAsyinc(AddFundingSourceDto dto)
         {
+            var validator = new AddFundingSourceDtoValidator();
+            validator.Validate(dto);
+
             var entity = new FundingSource()
             {
                 Description = dto.Description
@@ -59,6 +64,10 @@ namespace Application.Services
 
         public async Task UpdateAsync(long id , UpdateFundingSourceDto dto)
         {
+
+            var validator = new UpdateFundingSourceDtoValidator();
+            validator.Validate(dto);
+
             var entity = await _repository.GetById(id);
             if (entity == null)
                 throw new KeyNotFoundException($"فاندینگ سورس با شناسه {id} یافت نشد.");

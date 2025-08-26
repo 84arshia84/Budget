@@ -9,6 +9,8 @@ using Domain.Payment;
 using Domain.Allocation;
 using Domain.PaymentMethod;
 using Application.Dto.PaymentMethod;
+using Application.Validators.Allocation;
+using Application.Validators.Payment;
 
 namespace Application.Services
 {
@@ -23,6 +25,9 @@ namespace Application.Services
 
         public async Task AddAsync(AddPaymentDto dto)
         {
+            var validator = new AddPaymentDtoValidator();
+            validator.Validate(dto);
+
             var entity = new Payment()
             {
                 PaymentDate = dto.PaymentDate,
@@ -72,6 +77,9 @@ namespace Application.Services
 
         public async Task UpdateAsync(long id ,UpdatePaymentDto dto)
         {
+            var validator = new UpdatePaymentDtoValidator();
+            validator.Validate(dto);
+
             var entity = await _repository.GetById(id);
             if (entity == null)
                 throw new KeyNotFoundException($"پرداخت با شناسه {id} یافت نشد  ");

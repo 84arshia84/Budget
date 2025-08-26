@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Application.Contracts;
 using Application.Dto.FundingSource;
 using Application.Dto.PaymentMethod;
+using Application.Validators.Allocation;
+using Application.Validators.PaymentMethod;
 using Domain.PaymentMethod;
 
 namespace Application.Services
@@ -21,6 +23,9 @@ namespace Application.Services
 
         public async Task AddAsync(AddPaymentMethodDto dto)
         {
+            var validator = new AddPaymentMethodDtoValidator();
+            validator.Validate(dto);
+
             var entity = new PaymentMethod()
             {
                 title = dto.title
@@ -63,6 +68,9 @@ namespace Application.Services
 
         public async Task UpdateAsync(long id, UpdatePaymentMethodDto dto)
         {
+            var validator = new UpdatePaymentMethodDtoValidator();
+            validator.Validate(dto);
+
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null)
                throw new KeyNotFoundException($"تخصیص با شناسه {id} یافت نشد  ");

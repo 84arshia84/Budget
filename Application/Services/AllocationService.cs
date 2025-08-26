@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Application.Contracts;
 using Application.Dto.Allocation;
 using Application.Mapper.Allocation;
+using Application.Validators.Allocation;
 using Domain.Allocation;
 using Domain.AllocationActionBudgetRequest;
 
@@ -23,6 +24,9 @@ namespace Application.Services
 
         public async Task AddAsync(CreateAllocationDto dto)
         {
+            var validator = new AddAllocationDtoValidator();
+            validator.Validate(dto);
+
             var allocation = AllocationMapper.ToEntity(dto);
             await _repository.AddAsync(allocation);
         }
@@ -46,6 +50,10 @@ namespace Application.Services
 
         public async Task UpdateAsync(long id, UpdateAllocationDto dto)
         {
+
+            var validator = new UpdateAllocationDtoValidator();
+            validator.Validate(dto);
+
             var existing = await _repository.GetByIdAsync(id);
             if (existing == null)
                 throw new KeyNotFoundException($"Allocation {id} not found.");

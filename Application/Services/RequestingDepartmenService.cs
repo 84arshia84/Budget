@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Contracts;
 using Application.Dto.RequestingDepartmen;
+using Application.Validators.Allocation;
+using Application.Validators.RequestingDepartment;
 using Domain.RequestingDepartment;
 
 namespace Application.Services
@@ -20,6 +22,9 @@ namespace Application.Services
 
         public async Task AddAsync(AddRequestingDepartmenDto dto)
         {
+            var validator = new AddRequestingDepartmenDtoValidator();
+            validator.Validate(dto);
+
             var entity = new RequestingDepartment
             {
                 Description = dto.Description
@@ -60,6 +65,8 @@ namespace Application.Services
 
         public async Task UpdateAsync(long id, UpdateRequestingDepartmenDto dto)
         {
+          
+
             var department = await _repository.GetByIdAsync(id);
             if (department == null)
                 throw new KeyNotFoundException($"دپارتمان با شناسه {id} یافت نشد.");
