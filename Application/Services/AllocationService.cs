@@ -21,7 +21,6 @@ namespace Application.Services
         {
             _repository = repository;
         }
-
         public async Task AddAsync(CreateAllocationDto dto)
         {
             var validator = new AllocationValidator();
@@ -30,7 +29,6 @@ namespace Application.Services
             var allocation = AllocationMapper.ToEntity(dto);
             await _repository.AddAsync(allocation);
         }
-
         public async Task DeleteAsync(long id)
         {
             await _repository.DeleteAsync(id);

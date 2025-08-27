@@ -108,6 +108,10 @@ namespace Persistance
                 .HasForeignKey(p => p.AllocationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.PaymentAmount)
+                .HasColumnType("decimal(18,2)");
+
         }
     }
 }

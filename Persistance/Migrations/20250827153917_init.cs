@@ -25,6 +25,19 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PaymentMethod",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethod", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RequestingDepartments",
                 columns: table => new
                 {
@@ -126,7 +139,7 @@ namespace Persistance.Migrations
                         column: x => x.BudgetRequestId,
                         principalTable: "BudgetRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,7 +163,36 @@ namespace Persistance.Migrations
                         name: "FK_AllocationActionBudgetRequests_Allocations_AllocationId",
                         column: x => x.AllocationId,
                         principalTable: "Allocations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AllocationId = table.Column<long>(type: "bigint", nullable: false),
+                    PaymentMethodId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_Allocations_AllocationId",
+                        column: x => x.AllocationId,
+                        principalTable: "Allocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Payments_PaymentMethod_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethod",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -182,6 +224,16 @@ namespace Persistance.Migrations
                 name: "IX_BudgetRequests_RequestTypeId",
                 table: "BudgetRequests",
                 column: "RequestTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_AllocationId",
+                table: "Payments",
+                column: "AllocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_PaymentMethodId",
+                table: "Payments",
+                column: "PaymentMethodId");
         }
 
         /// <inheritdoc />
@@ -191,10 +243,16 @@ namespace Persistance.Migrations
                 name: "AllocationActionBudgetRequests");
 
             migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
                 name: "ActionBudgetRequestEntitys");
 
             migrationBuilder.DropTable(
                 name: "Allocations");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethod");
 
             migrationBuilder.DropTable(
                 name: "BudgetRequests");

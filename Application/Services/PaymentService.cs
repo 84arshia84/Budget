@@ -11,13 +11,14 @@ using Domain.PaymentMethod;
 using Application.Dto.PaymentMethod;
 using Application.Validators.Allocation;
 using Application.Validators.Payment;
+using Domain.AllocationActionBudgetRequest;
 
 namespace Application.Services
 {
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _repository;
-
+        private readonly IAllocationService _allocationService;
         public PaymentService (IPaymentRepository repository)
         {
             _repository = repository;
@@ -25,8 +26,11 @@ namespace Application.Services
 
         public async Task AddAsync(AddPaymentDto dto)
         {
+
+            var allocation = await _allocationService.GetById(dto.AllocationId);
+            
             var validator = new AddPaymentDtoValidator();
-            validator.Validate(dto);
+            validator.Validate(dto,allocation);
 
             var entity = new Payment()
             {

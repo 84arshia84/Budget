@@ -40,7 +40,7 @@ namespace Budget
             builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-
+           
 
 
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();

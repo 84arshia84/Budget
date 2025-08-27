@@ -10,9 +10,10 @@ namespace Domain.AllocationActionBudgetRequest
     {
         public long AllocationId { get; set; }
         public Allocation.Allocation Allocation { get; set; }
-        public long ActionBudgetRequestEntityId { get; set; } 
+        public long ActionBudgetRequestEntityId { get; set; }
+        public decimal AllocatedAmount { get; set; }
         public ActionBudgetRequestEntity.ActionBudgetRequestEntity ActionBudgetRequestEntity { get; set; }
-        public Decimal AllocatedAmount { get; set; } 
+        
 
     }
 }

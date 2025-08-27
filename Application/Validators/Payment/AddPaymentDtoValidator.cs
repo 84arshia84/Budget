@@ -4,27 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dto.Allocation;
+using Domain.AllocationActionBudgetRequest;
 
 namespace Application.Validators.Payment
 {
     public class AddPaymentDtoValidator
     {
-        public void Validate(AddPaymentDto dto)
+        public void Validate(AddPaymentDto paymentDto , GetAllocationDto allocationDto)
         {
-            if (dto == null)
-                throw new ArgumentNullException(nameof(dto));
+            if (paymentDto == null)
+                throw new ArgumentNullException(nameof(paymentDto));
 
-            if (dto.PaymentDate > DateTime.Now)
-                throw new ArgumentException("تاریخ پرداخت نمی‌تواند در آینده باشد.");
-
-            if (dto.PaymentAmount <= 0)
+            if (paymentDto.PaymentAmount <= 0)
                 throw new ArgumentException("مبلغ پرداخت باید بزرگ‌تر از صفر باشد.");
 
-            if (dto.AllocationId <= 0)
+            if (paymentDto.AllocationId <= 0)
                 throw new ArgumentException("شناسه تخصیص معتبر نیست.");
 
-            if (dto.PaymentMethodId <= 0)
+            if (paymentDto.PaymentMethodId <= 0)
                 throw new ArgumentException("شناسه روش پرداخت معتبر نیست.");
+            if (paymentDto.PaymentAmount > allocationDto.ActionAllocations.Sum((x=>x.BudgetAmountPeriod))) throw new ArgumentException("عدد وارد شده نمیتواند بزرگ تر از عدد تخصیص باشد ");
         }
     }
 }
