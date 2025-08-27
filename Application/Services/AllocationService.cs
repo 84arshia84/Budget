@@ -24,9 +24,9 @@ namespace Application.Services
 
         public async Task AddAsync(CreateAllocationDto dto)
         {
-            var validator = new AddAllocationDtoValidator();
-            validator.Validate(dto);
-
+            var validator = new AllocationValidator();
+            validator.Validator(dto);
+            validator.Validator(dto.ActionAllocations);
             var allocation = AllocationMapper.ToEntity(dto);
             await _repository.AddAsync(allocation);
         }
@@ -51,8 +51,9 @@ namespace Application.Services
         public async Task UpdateAsync(long id, UpdateAllocationDto dto)
         {
 
-            var validator = new UpdateAllocationDtoValidator();
-            validator.Validate(dto);
+            var validator = new AllocationValidator();
+            validator.Validator(dto);
+            validator.Validator(dto.ActionAllocations);
 
             var existing = await _repository.GetByIdAsync(id);
             if (existing == null)

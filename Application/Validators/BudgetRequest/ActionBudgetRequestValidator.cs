@@ -50,23 +50,13 @@ namespace Application.Validators.BudgetRequest
 
             if (dto.year < 1300 || dto.year > 1500)
                 throw new ArgumentException("سال باید بین 1300 تا 1500 باشد ");
-
-
-
-
         }
-
         public void Validator(UpdateBudgetRequestDto dto)
         {
-
-
             if (dto == null) { throw new ArgumentNullException(nameof(dto)); }
 
             if (dto.year < 1300 || dto.year > 1500)
                 throw new ArgumentException("سال باید بین 1300 تا 1500 باشد ");
-
-
-
 
         }
         public void Validator(List<ActionBudgetRequestDto> dtos)
