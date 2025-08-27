@@ -38,10 +38,9 @@ namespace Application.Services
 
         public async Task AddAsyinc(AddBudgetRequestDto dto)
         {
-          
+            var validator = new ActionBudgetRequestValidator();
+            validator.Validator(dto);
 
-            var validator = new ActionBudgetRequestDtoValidator();
-            validator.Validate(dto);
 
             var budgetRequestEntity = _mapper.ToEntity(dto);
             await _repository.AddAsync(budgetRequestEntity);
@@ -82,8 +81,8 @@ namespace Application.Services
 
         public async Task UpdateAsyinc(long id, UpdateBudgetRequestDto dto)
         {
-            var validator = new UpdateBudgetRequestDtoValidator();
-            validator.Validate(dto);
+            var validator = new ActionBudgetRequestValidator();
+            validator.Validator(dto);
 
             var entity = await _repository.GetById(id);
             if (entity == null)
