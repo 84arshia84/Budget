@@ -25,6 +25,8 @@ namespace Application.Validators.Payment
             if (paymentDto.PaymentMethodId <= 0)
                 throw new ArgumentException("شناسه روش پرداخت معتبر نیست.");
             if (paymentDto.PaymentAmount > allocationDto.ActionAllocations.Sum((x=>x.BudgetAmountPeriod))) throw new ArgumentException("عدد وارد شده نمیتواند بزرگ تر از عدد تخصیص باشد ");
+
+            
         }
     }
 }

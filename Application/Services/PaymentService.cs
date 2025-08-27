@@ -19,18 +19,27 @@ namespace Application.Services
     {
         private readonly IPaymentRepository _repository;
         private readonly IAllocationService _allocationService;
-        public PaymentService (IPaymentRepository repository)
+        private readonly IPaymentMethodService _paymentMethodService; // ۱. این فیلد را اضافه کنید
+
+        public PaymentService(IPaymentRepository repository, IAllocationService allocationService, IPaymentMethodService paymentMethodService) // Add IAllocationService here
         {
             _repository = repository;
+            _allocationService = allocationService; // And assign it here
+            _paymentMethodService = paymentMethodService; // ۳. آن را مقداردهی کنید
+
         }
+
 
         public async Task AddAsync(AddPaymentDto dto)
         {
-
+            var paymentMethod = await _paymentMethodService.GetByIdAsync(dto.PaymentMethodId);
+            if (paymentMethod == null)
+            {
+                throw new KeyNotFoundException($"متد پرداخت با شناسه {dto.PaymentMethodId} یافت نشد.");
+            }
             var allocation = await _allocationService.GetById(dto.AllocationId);
-            
             var validator = new AddPaymentDtoValidator();
-            validator.Validate(dto,allocation);
+            validator.Validate(dto, allocation);
 
             var entity = new Payment()
             {
@@ -40,7 +49,6 @@ namespace Application.Services
                 PaymentMethodId = dto.PaymentMethodId,
             };
             await _repository.AddAsync(entity);
-
         }
 
         public async Task DeleteAsync(long id)
