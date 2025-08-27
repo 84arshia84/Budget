@@ -6,28 +6,61 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Dto.Allocation;
 using Domain.AllocationActionBudgetRequest;
+using Application.Contracts;
+using Domain.Payment;
 
 namespace Application.Validators.Payment
 {
     public class AddPaymentDtoValidator
     {
-        public void Validate(AddPaymentDto paymentDto , GetAllocationDto allocationDto)
-        {
-            if (paymentDto == null)
-                throw new ArgumentNullException(nameof(paymentDto));
+        private readonly IAllocationService _allocationService;
+        private readonly IPaymentRepository _paymentRepository;
 
-            if (paymentDto.PaymentAmount <= 0)
+        public AddPaymentDtoValidator(
+            IAllocationService allocationService,
+            IPaymentRepository paymentRepository)
+        {
+            _allocationService = allocationService;
+            _paymentRepository = paymentRepository;
+        }
+
+        public async Task ValidateAsync(AddPaymentDto dto)
+        {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
+            if (dto.PaymentAmount <= 0)
                 throw new ArgumentException("مبلغ پرداخت باید بزرگ‌تر از صفر باشد.");
 
-            if (paymentDto.AllocationId <= 0)
+            if (dto.AllocationId <= 0)
                 throw new ArgumentException("شناسه تخصیص معتبر نیست.");
 
-            if (paymentDto.PaymentMethodId <= 0)
+            if (dto.PaymentMethodId <= 0)
                 throw new ArgumentException("شناسه روش پرداخت معتبر نیست.");
-            if (paymentDto.PaymentAmount > allocationDto.ActionAllocations.Sum((x=>x.BudgetAmountPeriod))) throw new ArgumentException("عدد وارد شده نمیتواند بزرگ تر از عدد تخصیص باشد ");
 
-            
+            // 1️⃣ دریافت تخصیص
+            var allocationDto = await _allocationService.GetById(dto.AllocationId);
+            if (allocationDto == null)
+                throw new ArgumentException($"تخصیص با شناسهٔ {dto.AllocationId} یافت نشد.");
+
+            // 2️⃣ محاسبه مجموع کل بودجه تخصیص داده شده
+            var totalAllocated = allocationDto.ActionAllocations.Sum(x => x.BudgetAmountPeriod);
+
+            // 3️⃣ محاسبه مجموع پرداخت‌های قبلی
+            var totalPaid = await _paymentRepository.GetTotalPaymentsByAllocationId(dto.AllocationId);
+
+            // 4️⃣ محاسبه مانده بودجه
+            var remaining = totalAllocated - totalPaid;
+
+            // 5️⃣ چک نهایی: آیا پرداخت جدید بیش از مانده است؟
+            if (dto.PaymentAmount > remaining)
+            {
+                throw new ArgumentException(
+                    $"مبلغ پرداخت ({dto.PaymentAmount:N0}) نمی‌تواند بیشتر از ماندهٔ بودجه ({remaining:N0}) باشد. " +
+                    $"مبلغ وارد شده {dto.PaymentAmount - remaining:N0} واحد بیشتر است.");
+            }
         }
     }
 }
+    
 

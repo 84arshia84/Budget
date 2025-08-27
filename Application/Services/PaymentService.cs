@@ -19,16 +19,21 @@ namespace Application.Services
     {
         private readonly IPaymentRepository _repository;
         private readonly IAllocationService _allocationService;
-        private readonly IPaymentMethodService _paymentMethodService; // ۱. این فیلد را اضافه کنید
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly AddPaymentDtoValidator _validator; // ✅ فیلد اضافه شد
 
-        public PaymentService(IPaymentRepository repository, IAllocationService allocationService, IPaymentMethodService paymentMethodService) // Add IAllocationService here
+        // ✅ کانستراکتور: دریافت ولیدیتور از DI
+        public PaymentService(
+            IPaymentRepository repository,
+            IAllocationService allocationService,
+            IPaymentMethodService paymentMethodService,
+            AddPaymentDtoValidator validator) // ✅ اضافه شد
         {
             _repository = repository;
-            _allocationService = allocationService; // And assign it here
-            _paymentMethodService = paymentMethodService; // ۳. آن را مقداردهی کنید
-
+            _allocationService = allocationService;
+            _paymentMethodService = paymentMethodService;
+            _validator = validator; // ✅ اختصاص داده شد
         }
-
 
         public async Task AddAsync(AddPaymentDto dto)
         {
@@ -37,17 +42,18 @@ namespace Application.Services
             {
                 throw new KeyNotFoundException($"متد پرداخت با شناسه {dto.PaymentMethodId} یافت نشد.");
             }
-            var allocation = await _allocationService.GetById(dto.AllocationId);
-            var validator = new AddPaymentDtoValidator();
-            validator.Validate(dto, allocation);
 
-            var entity = new Payment()
+            // ✅ استفاده از ولیدیتور
+            await _validator.ValidateAsync(dto);
+
+            var entity = new Payment
             {
                 PaymentDate = dto.PaymentDate,
                 PaymentAmount = dto.PaymentAmount,
                 AllocationId = dto.AllocationId,
                 PaymentMethodId = dto.PaymentMethodId,
             };
+
             await _repository.AddAsync(entity);
         }
 

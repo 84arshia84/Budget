@@ -14,5 +14,6 @@ namespace Domain.Payment
         Task DeleteAsync(long id);
         Task<List<Payment>> GetAllAsync();
         Task<Payment> GetById(long id);
+        Task<decimal> GetTotalPaymentsByAllocationId(long allocationId);
     }
 }

@@ -3,6 +3,7 @@ using Application.Contracts;
 using Application.Mapper;
 using Application.Mapper.Allocation;
 using Application.Services;
+using Application.Validators.Payment;
 using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
@@ -40,7 +41,7 @@ namespace Budget
             builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-           
+            builder.Services.AddScoped<AddPaymentDtoValidator>();
 
 
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();

@@ -53,5 +53,11 @@ namespace Persistance.Repositories
             _Context.Payments.Update(payment);
             await _Context.SaveChangesAsync();
         }
+        public async Task<decimal> GetTotalPaymentsByAllocationId(long allocationId)
+        {
+            return await _Context.Payments
+                .Where(p => p.AllocationId == allocationId)
+                .SumAsync(p => p.PaymentAmount);
+        }
     }
 }
