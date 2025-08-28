@@ -1,17 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Dto.Payment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Payment;
-using Domain.Allocation;
-using Domain.PaymentMethod;
-using Application.Dto.PaymentMethod;
-using Application.Validators.Allocation;
 using Application.Validators.Payment;
-using Domain.AllocationActionBudgetRequest;
 
 namespace Application.Services
 {
@@ -19,31 +9,21 @@ namespace Application.Services
     {
         private readonly IPaymentRepository _repository;
         private readonly IAllocationService _allocationService;
-        private readonly IPaymentMethodService _paymentMethodService;
-        private readonly AddPaymentDtoValidator _validator; // ✅ فیلد اضافه شد
+        private readonly AddPaymentDtoValidator _validator;
 
-        // ✅ کانستراکتور: دریافت ولیدیتور از DI
+  
         public PaymentService(
             IPaymentRepository repository,
             IAllocationService allocationService,
-            IPaymentMethodService paymentMethodService,
-            AddPaymentDtoValidator validator) // ✅ اضافه شد
+            AddPaymentDtoValidator validator) 
         {
             _repository = repository;
             _allocationService = allocationService;
-            _paymentMethodService = paymentMethodService;
-            _validator = validator; // ✅ اختصاص داده شد
+            _validator = validator;
         }
 
         public async Task AddAsync(AddPaymentDto dto)
         {
-            var paymentMethod = await _paymentMethodService.GetByIdAsync(dto.PaymentMethodId);
-            if (paymentMethod == null)
-            {
-                throw new KeyNotFoundException($"متد پرداخت با شناسه {dto.PaymentMethodId} یافت نشد.");
-            }
-
-            // ✅ استفاده از ولیدیتور
             await _validator.ValidateAsync(dto);
 
             var entity = new Payment
@@ -77,7 +57,6 @@ namespace Application.Services
 
             }).ToList();
         }
-
         public async Task<GetByIdPaymentDto> GetByIdAsync(long id)
         {
             var entity = await _repository.GetById(id);
@@ -100,7 +79,7 @@ namespace Application.Services
 
             var entity = await _repository.GetById(id);
             if (entity == null)
-                throw new KeyNotFoundException($"پرداخت با شناسه {id} یافت نشد  ");
+                throw new KeyNotFoundException($"پرداخت با شناسه {id} یافت نشد");
             
             entity.PaymentDate = dto.PaymentDate;
             entity.PaymentAmount = dto.PaymentAmount;

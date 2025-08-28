@@ -76,7 +76,7 @@ namespace Application.Services
             var entity = await _repository.GetById(id);
             if (entity == null) return null;
 
-            return _dtoMapper.ToGetByIdDto(entity);
+                 return _dtoMapper.ToGetByIdDto(entity);
         }
 
         public async Task UpdateAsyinc(long id, UpdateBudgetRequestDto dto)

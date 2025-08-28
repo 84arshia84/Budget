@@ -46,25 +46,26 @@ namespace Application.Services
 
         public async Task<GetByIdRequestTypeDto> GetByIdAsync(long id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity ==null)
-                return null;
-            return new GetByIdRequestTypeDto
+            var entity =await _repository.GetByIdAsync(id);
+           if (entity == null)
+               return null;
+           return new GetByIdRequestTypeDto
+           {
+               Id = entity.Id,
+               Description = entity.Description
+           };
 
-            {
-                Id = entity.Id,
-                Description = entity.Description
-            };
 
         }
 
         public async Task UpdateAsync(long id, UpdateRequestTypeDto dto)
         {
             var entity = await _repository.GetByIdAsync(id);
-            if (entity ==null)
-            throw new KeyNotFoundException($"ریکوست تایپ با شناسه {id} یافت نشد.");
+            if (entity == null){
+                throw new ArgumentException("یافت نشد"); }
 
             entity.Description = dto.Description;
+
             await _repository.UpdateAsync(entity);
         }
     }

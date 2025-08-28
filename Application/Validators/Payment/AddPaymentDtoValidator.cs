@@ -8,6 +8,7 @@ using Application.Dto.Allocation;
 using Domain.AllocationActionBudgetRequest;
 using Application.Contracts;
 using Domain.Payment;
+using Application.Services;
 
 namespace Application.Validators.Payment
 {
@@ -15,13 +16,18 @@ namespace Application.Validators.Payment
     {
         private readonly IAllocationService _allocationService;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IPaymentMethodService _paymentMethodService;
 
         public AddPaymentDtoValidator(
             IAllocationService allocationService,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository,
+            IPaymentMethodService paymentMethodService)
+
         {
             _allocationService = allocationService;
             _paymentRepository = paymentRepository;
+            _paymentMethodService = paymentMethodService;
+
         }
 
         public async Task ValidateAsync(AddPaymentDto dto)
@@ -56,9 +62,15 @@ namespace Application.Validators.Payment
             if (dto.PaymentAmount > remaining)
             {
                 throw new ArgumentException(
-                    $"مبلغ پرداخت ({dto.PaymentAmount:N0}) نمی‌تواند بیشتر از ماندهٔ بودجه ({remaining:N0}) باشد. " +
-                    $"مبلغ وارد شده {dto.PaymentAmount - remaining:N0} واحد بیشتر است.");
+                    $"مبلغ پرداخت ({dto.PaymentAmount}) نمی‌تواند بیشتر از ماندهٔ بودجه ({remaining}) باشد. ");
             }
+
+            var paymentMethod = await _paymentMethodService.GetByIdAsync(dto.PaymentMethodId);
+            if (paymentMethod == null)
+            {
+                throw new KeyNotFoundException($"متد پرداخت با شناسه {dto.PaymentMethodId} یافت نشد.");
+            }
+
         }
     }
 }
