@@ -18,6 +18,8 @@ namespace Domain.BudgetRequest
 
         // جدید برای مدیریت ActionBudgetRequests
         Task RemoveActionsByRequestId(long requestId);
+        Task<IEnumerable<dynamic>> GetAllTotalActionBudgetDynamicAsync();
+
 
 
     }

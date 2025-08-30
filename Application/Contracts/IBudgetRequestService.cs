@@ -14,7 +14,6 @@
             Task DeleteAsyinc( long id );
             Task<GetByIdBudgetRequestDto> GetByIdAsync(long id);
             Task<List<GetAllBudgetRequestDto>> GetAllAsync();
-            
-
-    }
-    }
+            Task<IEnumerable<dynamic>> GetAllTotalActionBudgetAsync();
+        }
+}

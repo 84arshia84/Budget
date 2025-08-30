@@ -18,8 +18,8 @@ namespace Budget.Controllers
         }
 
         [HttpPost]
-        public async Task <IActionResult>Add([FromBody]AddBudgetRequestDto dto)
-        { 
+        public async Task<IActionResult> Add([FromBody] AddBudgetRequestDto dto)
+        {
             await _Service.AddAsyinc(dto);
             return Ok(dto);
         }
@@ -57,8 +57,12 @@ namespace Budget.Controllers
             return NoContent();
         }
 
-
-
+        [HttpGet("with-total")]
+        public async Task<IActionResult> GetAllWithTotal()
+        {
+            var result = await _Service.GetAllTotalActionBudgetAsync();
+            return Ok(result);
+        }
 
 
 

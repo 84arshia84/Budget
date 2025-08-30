@@ -112,5 +112,10 @@ namespace Application.Services
 
             await _repository.UpdateAsync(entity);
         }
+
+        public async Task<IEnumerable<dynamic>> GetAllTotalActionBudgetAsync()
+        {
+            return await _repository.GetAllTotalActionBudgetDynamicAsync();
+        }
     }
 }
