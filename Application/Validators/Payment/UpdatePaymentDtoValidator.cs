@@ -1,4 +1,5 @@
-﻿using Application.Dto.Payment;
+﻿using Application.Dto.Allocation;
+using Application.Dto.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Application.Validators.Payment
 {
     public class UpdatePaymentDtoValidator
     {
-        public void Validate(UpdatePaymentDto dto)
+        public void Validate(UpdatePaymentDto dto, GetAllocationDto allocationDto, decimal previousPaymentAmount)
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
@@ -22,6 +23,19 @@ namespace Application.Validators.Payment
             if (dto.PaymentMethodId <= 0)
                 throw new ArgumentException("شناسه روش پرداخت معتبر نیست.");
 
+            // جمع کل تخصیص
+            var totalAllocated = allocationDto.ActionAllocations.Sum(x => x.BudgetAmountPeriod);
+
+            // در هنگام آپدیت، باید اختلاف پرداخت جدید و قبلی را لحاظ کنیم
+            var diff = dto.PaymentAmount - previousPaymentAmount;
+
+            if (diff > 0) // یعنی مبلغ بیشتر شده
+            {
+                var totalPayments = allocationDto.ActionAllocations.Sum(x => x.BudgetAmountPeriod);
+                if (dto.PaymentAmount > totalAllocated)
+                    throw new ArgumentException($"مبلغ پرداخت جدید ({totalAllocated})نمی‌تواند بیشتر از مبلغ تخصیص باشد.");
+            }
         }
     }
 }
+    

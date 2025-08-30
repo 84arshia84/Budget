@@ -72,19 +72,22 @@ namespace Application.Services
             };
         }
 
-        public async Task UpdateAsync(long id ,UpdatePaymentDto dto)
+        public async Task UpdateAsync(long id, UpdatePaymentDto dto)
         {
-            var validator = new UpdatePaymentDtoValidator();
-            validator.Validate(dto);
-
             var entity = await _repository.GetById(id);
             if (entity == null)
                 throw new KeyNotFoundException($"پرداخت با شناسه {id} یافت نشد");
-            
+
+            var allocation = await _allocationService.GetById(dto.AllocationId);
+
+            var validator = new UpdatePaymentDtoValidator();
+            validator.Validate(dto, allocation, entity.PaymentAmount);
+
             entity.PaymentDate = dto.PaymentDate;
             entity.PaymentAmount = dto.PaymentAmount;
             entity.AllocationId = dto.AllocationId;
             entity.PaymentMethodId = dto.PaymentMethodId;
+
             await _repository.UpdateAsync(entity);
         }
     }
