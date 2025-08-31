@@ -14,7 +14,7 @@ namespace Domain.Allocation
         Task<List<Allocation>> GetAllAsync();
         Task <Allocation> GetByIdAsync(long Id);
 
-        Task RemoveActionsByAllocationId(long allocationId);
+        //Task RemoveActionsByAllocationId(long allocationId);
 
     }
 }

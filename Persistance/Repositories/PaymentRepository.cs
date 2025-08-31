@@ -42,10 +42,7 @@ namespace Persistance.Repositories
 
         public async Task<Payment> GetById(long id)
         {
-
-
             return await _Context.Payments.FindAsync(id);
-
         }
 
         public async Task UpdateAsync(Payment payment)

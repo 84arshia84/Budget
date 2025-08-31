@@ -16,6 +16,7 @@ namespace Application.Validators.Allocation
         public void Validator(UpdateAllocationDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
+
         }
         public void Validator( List<ActionAllocationDto>  dtos)
         {

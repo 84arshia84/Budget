@@ -54,17 +54,17 @@ namespace Persistance.Repositories
         }
 
 
-        public async Task RemoveActionsByAllocationId(long allocationId)
-        {
-            var actions = await _context.AllocationActionBudgetRequests
-                .Where(x => x.AllocationId == allocationId)
-                .ToListAsync();
+        //public async Task RemoveActionsByAllocationId(long allocationId)
+        //{
+        //    var actions = await _context.AllocationActionBudgetRequests
+        //        .Where(x => x.AllocationId == allocationId)
+        //        .ToListAsync();
 
-            if (actions.Any())
-            {
-                _context.AllocationActionBudgetRequests.RemoveRange(actions);
-                await _context.SaveChangesAsync();
-            }
-        }
+        //    if (actions.Any())
+        //    {
+        //        _context.AllocationActionBudgetRequests.RemoveRange(actions);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //}
     }
 }

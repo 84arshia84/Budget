@@ -57,19 +57,16 @@ namespace Application.Services
             if (existing == null)
                 throw new KeyNotFoundException($"Allocation {id} not found.");
 
-            // آپدیت فیلدهای اصلی
             existing.Title = dto.Title;
             existing.Date = dto.Date;
             existing.BudgetRequestId = dto.BudgetRequestId;
 
-            // 👇 پاک کردن Action های قبلی از دیتابیس
-            await _repository.RemoveActionsByAllocationId(existing.Id);
+            //await _repository.RemoveActionsByAllocationId(existing.Id);
 
-            // 👇 اضافه کردن Action های جدید
             existing.AllocationActionBudgetRequests = dto.ActionAllocations
                 .Select(item => new AllocationActionBudgetRequest
                 {
-                    AllocationId = existing.Id, // 👈 مهم
+                    AllocationId = existing.Id, 
                     ActionBudgetRequestEntityId = item.ActionBudgetRequestId,
                     AllocatedAmount = item.BudgetAmountPeriod
                 }).ToList();
