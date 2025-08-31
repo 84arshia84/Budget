@@ -12,8 +12,8 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250827160137_inita")]
-    partial class inita
+    [Migration("20250831064822_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

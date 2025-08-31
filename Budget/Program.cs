@@ -67,6 +67,12 @@ namespace Budget
 
             var app = builder.Build();
 
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(x => x.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None));
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
