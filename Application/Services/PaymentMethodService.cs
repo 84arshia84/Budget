@@ -20,7 +20,6 @@ namespace Application.Services
         {
             _repository = repository;
         }
-
         public async Task AddAsync(AddPaymentMethodDto dto)
         {
             var validator = new AddPaymentMethodDtoValidator();
@@ -32,12 +31,10 @@ namespace Application.Services
             };
             await _repository.AddAsync(entity);
         }
-
         public async Task DeleteAsync(long id)
         {
             await _repository.DeleteAsync(id);
         }
-
         public async Task<List<GetAllPaymentMethodDto>> GetAllAsync()
         {
 
@@ -50,7 +47,6 @@ namespace Application.Services
 
             }).ToList();
         }
-
         public async Task<GetByIdPaymentMethodDto> GetByIdAsync(long id)
         {
             var entity = await _repository.GetByIdAsync(id);
@@ -63,9 +59,6 @@ namespace Application.Services
 
             };
         }
-
-       
-
         public async Task UpdateAsync(long id, UpdatePaymentMethodDto dto)
         {
             var validator = new UpdatePaymentMethodDtoValidator();

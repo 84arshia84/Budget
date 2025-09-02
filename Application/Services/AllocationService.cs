@@ -33,19 +33,16 @@ namespace Application.Services
         {
             await _repository.DeleteAsync(id);
         }
-
         public async Task<List<GetAllocationDto>> GetAllAsync()
         {
             var allocations = await _repository.GetAllAsync();
             return AllocationMapper.ToDtoList(allocations);
         }
-
         public async Task<GetAllocationDto> GetById(long id)
         {
             var allocation = await _repository.GetByIdAsync(id);
             return allocation == null ? null : AllocationMapper.ToDto(allocation);
         }
-
         public async Task UpdateAsync(long id, UpdateAllocationDto dto)
         {
 
