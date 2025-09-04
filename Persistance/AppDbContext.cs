@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.AccessGroup;
 using Domain.ActionBudgetRequestEntity;
 using Domain.Allocation;
 using Domain.AllocationActionBudgetRequest;
@@ -32,6 +33,13 @@ namespace Persistance
         public DbSet<RequestType> RequestTypes { get; set; }
         public DbSet<PaymentMethod> PaymentMethod { get; set; }
         public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<AccessGroup> AccessGroups { get; set; }
+        public DbSet<AccessGroupUser> AccessGroupUsers { get; set; }
+        public DbSet<AccessGroupRequestType> AccessGroupRequestTypes { get; set; }
+        public DbSet<AccessGroupRequestingDepartment> AccessGroupRequestingDepartments { get; set; }
+        public DbSet<AccessGroupFundingSource> AccessGroupFundingSources { get; set; }
+        public DbSet<AccessGroupProperties> AccessGroupProperties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -111,6 +119,43 @@ namespace Persistance
             modelBuilder.Entity<Payment>()
                 .Property(p => p.PaymentAmount)
                 .HasColumnType("decimal(18,2)");
+
+
+
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasOne(a => a.Properties)
+                .WithOne(p => p.AccessGroup)
+                .HasForeignKey<AccessGroupProperties>(p => p.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // AccessGroup → Users (1-n)
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.Users)
+                .WithOne(u => u.AccessGroup)
+                .HasForeignKey(u => u.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // AccessGroup → RequestTypes (1-n)
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.RequestTypes)
+                .WithOne(rt => rt.AccessGroup)
+                .HasForeignKey(rt => rt.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // AccessGroup → RequestingDepartments (1-n)
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.RequestingDepartments)
+                .WithOne(rd => rd.AccessGroup)
+                .HasForeignKey(rd => rd.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // AccessGroup → FundingSources (1-n)
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.FundingSources)
+                .WithOne(fs => fs.AccessGroup)
+                .HasForeignKey(fs => fs.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

@@ -4,6 +4,7 @@ using Application.Mapper;
 using Application.Mapper.Allocation;
 using Application.Services;
 using Application.Validators.Payment;
+using Domain.AccessGroup;
 using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
@@ -40,6 +41,7 @@ namespace Budget
             builder.Services.AddScoped<IAllocationRepository,AllocationRepository>();
             builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IAccessGroupRepository, AccessGroupRepository>();
 
             builder.Services.AddScoped<AddPaymentDtoValidator>();
 
@@ -51,7 +53,7 @@ namespace Budget
             builder.Services.AddScoped<IAllocationService, AllocationService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
-
+            builder.Services.AddScoped<IAccessGroupService, AccessGroupService>();
 
 
             builder.Services.AddScoped<BudgetRequestMapper>();
