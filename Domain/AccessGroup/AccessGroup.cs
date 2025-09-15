@@ -18,6 +18,7 @@ namespace Domain.AccessGroup
         public ICollection<AccessGroupRequestType> RequestTypes { get; set; } = new List<AccessGroupRequestType>();
         public ICollection<AccessGroupRequestingDepartment> RequestingDepartments { get; set; } = new List<AccessGroupRequestingDepartment>();
         public ICollection<AccessGroupFundingSource> FundingSources { get; set; } = new List<AccessGroupFundingSource>();
-        public ICollection<DepartmentAccessgroupSystemParts> SystemParts { get; set; }=new  List<DepartmentAccessgroupSystemParts>();
+        public ICollection<DepartmentAccessgroupSystemParts> DepartmentAccessgroupSystemParts { get; set; } = new List<DepartmentAccessgroupSystemParts>();
+
     }
 }

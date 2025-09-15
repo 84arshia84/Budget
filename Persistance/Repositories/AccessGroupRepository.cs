@@ -52,6 +52,7 @@ namespace Persistance.Repositories
                 .Include(x => x.RequestingDepartments)
                 .Include(x => x.FundingSources)
                 .Include(x => x.Properties)
+                .Include(x => x.DepartmentAccessgroupSystemParts)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

@@ -44,8 +44,12 @@ namespace Application.Services
                 RequestTypes = dto.AccessGroupRequestTypes.Select(r => new AccessGroupRequestType { RequestTypeId = r }).ToList(),
                 RequestingDepartments = dto.AccessGroupRequestingDepartments.Select(d => new AccessGroupRequestingDepartment { RequestingDepartmentId = d }).ToList(),
                 FundingSources = dto.AccessGroupFundingSources.Select(f => new AccessGroupFundingSource { FundingSourceId = f }).ToList(),
-               
-            };
+                DepartmentAccessgroupSystemParts = dto.AccessGroupSystemParts?.Select(s => new DepartmentAccessgroupSystemParts
+                {
+                    SystemParts = (SystemParts)s.SystemPart, // تبدیل int به Enum
+                    AccessGroupEnum = (AccessGroupEnum)s.DepartmentAction // تبدیل int به Enum
+                }).ToList() ?? new List<DepartmentAccessgroupSystemParts>()
+        };
 
             await _repository.AddAsync(entity);
         }
@@ -107,13 +111,14 @@ namespace Application.Services
                     FundingSourceEdit = entity.Properties.FundingSourceEdit,
                     FundingSourceDelete = entity.Properties.FundingSourceDelete
                 },
-                AccessGroupSystemParts = entity.SystemParts.Select(s => new AccessGroupSystemPartDto
+                AccessGroupSystemParts = entity.DepartmentAccessgroupSystemParts.Select(s => new AccessGroupSystemPartDto
                 {
-                    SystemPart = (int)s.SystemParts,
-                    DepartmentAction = (int)s.SystemParts
-
+                    SystemPart = (int)s.SystemParts, 
+                    DepartmentAction = (int)s.AccessGroupEnum 
                 }).ToList()
             };
         }
-    }
-}
+    };
+        }
+    
+

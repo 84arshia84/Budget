@@ -192,6 +192,13 @@ namespace Persistance
                 .HasForeignKey<AccessGroupProperties>(p => p.AccessGroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.DepartmentAccessgroupSystemParts)
+                .WithOne(d => d.AccessGroup)
+                .HasForeignKey(d => d.AccessGroupid)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
