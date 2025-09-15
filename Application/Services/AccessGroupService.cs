@@ -1,6 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Dto.AccessGroupe;
 using Domain.AccessGroup;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,8 @@ namespace Application.Services
                 Users = dto.AccessGroupUsers.Select(u => new AccessGroupUser { UserId = u }).ToList(),
                 RequestTypes = dto.AccessGroupRequestTypes.Select(r => new AccessGroupRequestType { RequestTypeId = r }).ToList(),
                 RequestingDepartments = dto.AccessGroupRequestingDepartments.Select(d => new AccessGroupRequestingDepartment { RequestingDepartmentId = d }).ToList(),
-                FundingSources = dto.AccessGroupFundingSources.Select(f => new AccessGroupFundingSource { FundingSourceId = f }).ToList()
+                FundingSources = dto.AccessGroupFundingSources.Select(f => new AccessGroupFundingSource { FundingSourceId = f }).ToList(),
+               
             };
 
             await _repository.AddAsync(entity);
@@ -107,8 +109,9 @@ namespace Application.Services
                 },
                 AccessGroupSystemParts = entity.SystemParts.Select(s => new AccessGroupSystemPartDto
                 {
-                    SystemPart = s.SystemPart,
-                    DepartmentAction = s.DepartmentAction
+                    SystemPart = (int)s.SystemParts,
+                    DepartmentAction = (int)s.SystemParts
+
                 }).ToList()
             };
         }
