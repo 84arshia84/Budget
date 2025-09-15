@@ -157,6 +157,41 @@ namespace Persistance
                 .HasForeignKey(fs => fs.AccessGroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+
+
+
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.Users)
+                .WithOne(u => u.AccessGroup)
+                .HasForeignKey(u => u.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.RequestTypes)
+                .WithOne(rt => rt.AccessGroup)
+                .HasForeignKey(rt => rt.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.RequestingDepartments)
+                .WithOne(rd => rd.AccessGroup)
+                .HasForeignKey(rd => rd.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasMany(a => a.FundingSources)
+                .WithOne(fs => fs.AccessGroup)
+                .HasForeignKey(fs => fs.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AccessGroup>()
+                .HasOne(a => a.Properties)
+                .WithOne(p => p.AccessGroup)
+                .HasForeignKey<AccessGroupProperties>(p => p.AccessGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
