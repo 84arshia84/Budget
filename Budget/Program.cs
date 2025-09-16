@@ -3,6 +3,7 @@ using Application.Contracts;
 using Application.Mapper;
 using Application.Mapper.Allocation;
 using Application.Services;
+using Application.Validators.AccessGroupe;
 using Application.Validators.Payment;
 using Domain.AccessGroup;
 using Domain.Allocation;
@@ -44,6 +45,7 @@ namespace Budget
             builder.Services.AddScoped<IAccessGroupRepository, AccessGroupRepository>();
 
             builder.Services.AddScoped<AddPaymentDtoValidator>();
+            builder.Services.AddScoped<AddAccessGroupDtoValidator>();
 
 
             builder.Services.AddScoped<IRequestingDepartmenService, RequestingDepartmenService>();

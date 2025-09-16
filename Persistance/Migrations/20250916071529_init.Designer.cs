@@ -12,8 +12,8 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250902101533_initass")]
-    partial class initass
+    [Migration("20250916071529_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,190 @@ namespace Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroup", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccessGroups");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupFundingSource", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccessGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FundingSourceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupId");
+
+                    b.ToTable("AccessGroupFundingSources");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupProperties", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccessGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("FundingSourceCreate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FundingSourceDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FundingSourceEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FundingSourceView")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestTypeCreate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestTypeDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestTypeEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestTypeView")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestingDepartmentCreate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestingDepartmentDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestingDepartmentEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestingDepartmentView")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupId")
+                        .IsUnique();
+
+                    b.ToTable("AccessGroupProperties");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupRequestType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccessGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RequestTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupId");
+
+                    b.ToTable("AccessGroupRequestTypes");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupRequestingDepartment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccessGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RequestingDepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupId");
+
+                    b.ToTable("AccessGroupRequestingDepartments");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccessGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupId");
+
+                    b.ToTable("AccessGroupUsers");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.DepartmentAccessgroupSystemParts", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AccessGroupEnum")
+                        .HasColumnType("int");
+
+                    b.Property<long>("AccessGroupid")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("SystemParts")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessGroupid");
+
+                    b.ToTable("DepartmentAccessgroupSystemParts");
+                });
 
             modelBuilder.Entity("Domain.ActionBudgetRequestEntity.ActionBudgetRequestEntity", b =>
                 {
@@ -235,6 +419,72 @@ namespace Persistance.Migrations
                     b.ToTable("RequestingDepartments");
                 });
 
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupFundingSource", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithMany("FundingSources")
+                        .HasForeignKey("AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupProperties", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithOne("Properties")
+                        .HasForeignKey("Domain.AccessGroup.AccessGroupProperties", "AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupRequestType", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithMany("RequestTypes")
+                        .HasForeignKey("AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupRequestingDepartment", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithMany("RequestingDepartments")
+                        .HasForeignKey("AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroupUser", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithMany("Users")
+                        .HasForeignKey("AccessGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.DepartmentAccessgroupSystemParts", b =>
+                {
+                    b.HasOne("Domain.AccessGroup.AccessGroup", "AccessGroup")
+                        .WithMany("DepartmentAccessgroupSystemParts")
+                        .HasForeignKey("AccessGroupid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessGroup");
+                });
+
             modelBuilder.Entity("Domain.ActionBudgetRequestEntity.ActionBudgetRequestEntity", b =>
                 {
                     b.HasOne("Domain.BudgetRequest.BudgetRequest", "BudgetRequest")
@@ -320,6 +570,22 @@ namespace Persistance.Migrations
                     b.Navigation("Allocation");
 
                     b.Navigation("PaymentMethod");
+                });
+
+            modelBuilder.Entity("Domain.AccessGroup.AccessGroup", b =>
+                {
+                    b.Navigation("DepartmentAccessgroupSystemParts");
+
+                    b.Navigation("FundingSources");
+
+                    b.Navigation("Properties")
+                        .IsRequired();
+
+                    b.Navigation("RequestTypes");
+
+                    b.Navigation("RequestingDepartments");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Allocation.Allocation", b =>
