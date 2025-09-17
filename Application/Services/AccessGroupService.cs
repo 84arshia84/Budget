@@ -27,7 +27,6 @@ namespace Application.Services
         public async Task AddAsync(AddAccessGroupDto dto)
         {
             await _validator.ValidateAsync(dto);
-
             var entity = AccessGroupMapper.ToEntity(dto);
             await _repository.AddAsync(entity);
         }
@@ -38,8 +37,8 @@ namespace Application.Services
             if (entity == null)
                 throw new KeyNotFoundException($"AccessGroup با شناسه {id} پیدا نشد.");
 
-            entity.Title = dto.Title;
-            entity.Description = dto.Description;
+            await _validator.ValidateAsync(dto);
+            AccessGroupMapper.UpdateEntity(entity, dto);
 
             await _repository.UpdateAsync(entity);
         }

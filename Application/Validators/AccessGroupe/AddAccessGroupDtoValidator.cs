@@ -1,5 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Dto.AccessGroupe;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,16 @@ namespace Application.Validators.AccessGroupe
                 var fundingSource = await _fundingSourceService.GetById(id);
                 if (fundingSource == null)
                     throw new ArgumentException($"فاندینگ سورس با شناسه {id} یافت نشد.");
+            }
+
+            foreach (var part in dto.AccessGroupSystemParts)
+            {
+                if (!Enum.IsDefined(typeof(SystemParts), part.SystemPart))
+                    throw new ArgumentException($"SystemPart با مقدار {part.SystemPart} معتبر نیست.");
+
+                if (!Enum.IsDefined(typeof(AccessGroupEnum), part.DepartmentAction))
+                    throw new ArgumentException($"DepartmentAction با مقدار {part.DepartmentAction} معتبر نیست.");
+
             }
         }
     }
