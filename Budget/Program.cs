@@ -13,6 +13,7 @@ using Domain.Payment;
 using Domain.PaymentMethod;
 using Domain.RequestingDepartment;
 using Domain.RequestType;
+using Domain.UserPermissions;
 using Microsoft.EntityFrameworkCore;
 using Persistance;
 using Persistance.Repositories;
@@ -43,6 +44,7 @@ namespace Budget
             builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IAccessGroupRepository, AccessGroupRepository>();
+            builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 
             builder.Services.AddScoped<AddPaymentDtoValidator>();
             builder.Services.AddScoped<AddAccessGroupDtoValidator>();
@@ -56,6 +58,7 @@ namespace Budget
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IAccessGroupService, AccessGroupService>();
+            builder.Services.AddScoped<IUserAccessService, UserAccessService>();
 
 
             builder.Services.AddScoped<BudgetRequestMapper>();

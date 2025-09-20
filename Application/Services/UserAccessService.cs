@@ -5,6 +5,8 @@ using Application.Dto.FundingSource;
 using Application.Dto.Payment;
 using Application.Dto.RequestingDepartmen;
 using Application.Dto.RequestType;
+using Application.Mapper;
+using Application.Mapper.Allocation;
 using Domain.Allocation;
 using Domain.BudgetRequest;
 using Domain.FundingSource;
@@ -80,21 +82,35 @@ namespace Application.Services
             var perms = await _repo.GetUserPermissionsAsync(userId);
             if (!perms.BudgetRequestView) return Enumerable.Empty<GetAllBudgetRequestDto>();
             var all = await _budgetRepo.GetAllAsync();
-            return all;
+            var dtoMapper = new BudgetRequestToDtoMapper();
+            return all.Select(entity => dtoMapper.ToGetAllDto(entity));
         }
+
 
         public async Task<IEnumerable<GetAllocationDto>> GetAllowedAllocationsAsync(Guid userId)
         {
             var perms = await _repo.GetUserPermissionsAsync(userId);
             if (!perms.AllocationView) return Enumerable.Empty<GetAllocationDto>();
-            return await _allocationRepo.GetAllAsync();
+            var all = await _allocationRepo.GetAllAsync();
+
+            return AllocationMapper.ToDtoList(all);
         }
 
         public async Task<IEnumerable<GetAllPaymentDto>> GetAllowedPaymentsAsync(Guid userId)
         {
             var perms = await _repo.GetUserPermissionsAsync(userId);
             if (!perms.PaymentView) return Enumerable.Empty<GetAllPaymentDto>();
-            return await _paymentRepo.GetAllAsync();
+            var all = await _paymentRepo.GetAllAsync();
+
+            // --- اضافه کردن این خط برای تبدیل Domain به DTO ---
+            return all.Select(a => new GetAllPaymentDto()
+            {
+                Id = a.Id,
+                PaymentDate = a.PaymentDate,
+                PaymentAmount = a.PaymentAmount,
+                AllocationId = a.AllocationId,
+                PaymentMethodId = a.PaymentMethodId,
+            });
         }
 
         public async Task<bool> CanAccessRequestTypeAsync(Guid userId, long id)
