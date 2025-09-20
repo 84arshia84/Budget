@@ -5,6 +5,7 @@ using Application.Dto.FundingSource;
 using Application.Dto.Payment;
 using Application.Dto.RequestingDepartmen;
 using Application.Dto.RequestType;
+using Application.Dto.UserAccess;
 using Application.Mapper;
 using Application.Mapper.Allocation;
 using Domain.Allocation;
@@ -53,6 +54,149 @@ namespace Application.Services
         public async Task<UserPermissions> GetPermissionsAsync(Guid userId)
             => await _repo.GetUserPermissionsAsync(userId);
 
+        // فقط مواردی که کاربر دسترسی دارد را برمی‌گرداند
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserRequestTypeAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            var allRequestTypes = await _requestTypeRepo.GetAllAsync();
+            
+            // فقط مواردی که کاربر دسترسی دارد
+            return allRequestTypes
+                .Where(rt => perms.AllowedRequestTypeIds.Contains(rt.Id))
+                .Select(rt => new UserEntityAccessDto
+                {
+                    EntityId = rt.Id,
+                    EntityName = rt.Description,
+                    CanView = perms.RequestTypeView,
+                    CanCreate = perms.RequestTypeCreate,
+                    CanEdit = perms.RequestTypeEdit,
+                    CanDelete = perms.RequestTypeDelete
+                });
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserRequestingDepartmentAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            var allDepartments = await _departmentRepo.GetAllAsync();
+            
+            // فقط مواردی که کاربر دسترسی دارد
+            return allDepartments
+                .Where(d => perms.AllowedDepartmentIds.Contains(d.Id))
+                .Select(d => new UserEntityAccessDto
+                {
+                    EntityId = d.Id,
+                    EntityName = d.Description,
+                    CanView = perms.RequestingDepartmentView,
+                    CanCreate = perms.RequestingDepartmentCreate,
+                    CanEdit = perms.RequestingDepartmentEdit,
+                    CanDelete = perms.RequestingDepartmentDelete
+                });
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserFundingSourceAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            var allFundingSources = await _fundingRepo.GetAllAsync();
+            
+            // فقط مواردی که کاربر دسترسی دارد
+            return allFundingSources
+                .Where(f => perms.AllowedFundingSourceIds.Contains(f.Id))
+                .Select(f => new UserEntityAccessDto
+                {
+                    EntityId = f.Id,
+                    EntityName = f.Description,
+                    CanView = perms.FundingSourceView,
+                    CanCreate = perms.FundingSourceCreate,
+                    CanEdit = perms.FundingSourceEdit,
+                    CanDelete = perms.FundingSourceDelete
+                });
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserBudgetRequestAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            
+            // اگر کاربر دسترسی View ندارد، لیست خالی برمی‌گردانیم
+            if (!perms.BudgetRequestView)
+                return Enumerable.Empty<UserEntityAccessDto>();
+
+            var allBudgetRequests = await _budgetRepo.GetAllAsync();
+            
+            return allBudgetRequests.Select(br => new UserEntityAccessDto
+            {
+                EntityId = br.Id,
+                EntityName = br.RequestTitle,
+                CanView = perms.BudgetRequestView,
+                CanCreate = perms.BudgetRequestCreate,
+                CanEdit = perms.BudgetRequestEdit,
+                CanDelete = perms.BudgetRequestDelete
+            });
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserAllocationAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            
+            // اگر کاربر دسترسی View ندارد، لیست خالی برمی‌گردانیم
+            if (!perms.AllocationView)
+                return Enumerable.Empty<UserEntityAccessDto>();
+
+            var allAllocations = await _allocationRepo.GetAllAsync();
+            
+            return allAllocations.Select(a => new UserEntityAccessDto
+            {
+                EntityId = a.Id,
+                EntityName = a.Title,
+                CanView = perms.AllocationView,
+                CanCreate = perms.AllocationCreate,
+                CanEdit = perms.AllocationEdit,
+                CanDelete = perms.AllocationDelete
+            });
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserPaymentAccessAsync(Guid userId)
+        {
+            var perms = await _repo.GetUserPermissionsAsync(userId);
+            
+            // اگر کاربر دسترسی View ندارد، لیست خالی برمی‌گردانیم
+            if (!perms.PaymentView)
+                return Enumerable.Empty<UserEntityAccessDto>();
+
+            var allPayments = await _paymentRepo.GetAllAsync();
+            
+            return allPayments.Select(p => new UserEntityAccessDto
+            {
+                EntityId = p.Id,
+                EntityName = $"Payment {p.Id} - {p.PaymentAmount:C}",
+                CanView = perms.PaymentView,
+                CanCreate = perms.PaymentCreate,
+                CanEdit = perms.PaymentEdit,
+                CanDelete = perms.PaymentDelete
+            });
+        }
+
+        // متدهای اضافی (اختیاری)
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserPaymentMethodAccessAsync(Guid userId)
+        {
+            return await Task.FromResult(Enumerable.Empty<UserEntityAccessDto>());
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserAccessGroupAccessAsync(Guid userId)
+        {
+            return await Task.FromResult(Enumerable.Empty<UserEntityAccessDto>());
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserActionBudgetRequestAccessAsync(Guid userId)
+        {
+            return await Task.FromResult(Enumerable.Empty<UserEntityAccessDto>());
+        }
+
+        public async Task<IEnumerable<UserEntityAccessDto>> GetUserAllocationActionBudgetRequestAccessAsync(Guid userId)
+        {
+            return await Task.FromResult(Enumerable.Empty<UserEntityAccessDto>());
+        }
+
+        // متدهای قبلی (برای سازگاری)
         public async Task<IEnumerable<GetAllRequestTypeDto>> GetAllowedRequestTypesAsync(Guid userId)
         {
             var perms = await _repo.GetUserPermissionsAsync(userId);
@@ -86,13 +230,11 @@ namespace Application.Services
             return all.Select(entity => dtoMapper.ToGetAllDto(entity));
         }
 
-
         public async Task<IEnumerable<GetAllocationDto>> GetAllowedAllocationsAsync(Guid userId)
         {
             var perms = await _repo.GetUserPermissionsAsync(userId);
             if (!perms.AllocationView) return Enumerable.Empty<GetAllocationDto>();
             var all = await _allocationRepo.GetAllAsync();
-
             return AllocationMapper.ToDtoList(all);
         }
 
@@ -101,8 +243,6 @@ namespace Application.Services
             var perms = await _repo.GetUserPermissionsAsync(userId);
             if (!perms.PaymentView) return Enumerable.Empty<GetAllPaymentDto>();
             var all = await _paymentRepo.GetAllAsync();
-
-            // --- اضافه کردن این خط برای تبدیل Domain به DTO ---
             return all.Select(a => new GetAllPaymentDto()
             {
                 Id = a.Id,
